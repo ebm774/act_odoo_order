@@ -1,6 +1,7 @@
-from odoo import models, fields, api, _, base64
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+import base64
 
 class OrdAttachment(models.Model):
     _name = 'ord.attachment'
@@ -10,7 +11,7 @@ class OrdAttachment(models.Model):
     filename = fields.Char(string='Filename', required=True, default='none')
     size_kb = fields.Float(string='Size', required=True, digit=(10,2))
     extension = fields.Char(string='Extension', compute='_compute_extension', store=True, required=True)
-    date = fields.DateTime(string='Date', required=True, default=fields.Datetime.now)
+    date = fields.Date(string='Date', required=True, default=fields.Date.today())
     file = fields.Binary(string='File', attachment=True, required=True)
 
     order_id = fields.Many2one('ord.main', string='Order', required=True)

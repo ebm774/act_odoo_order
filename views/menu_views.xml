@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_order_root"
+        name="Orders"
+        web_icon="order,static/description/icon.png"
+        sequence="60"/>
+
+    <menuitem id="menu_order_prout" name="Orders_prout" sequence="60"/>
+
+        <menuitem id="menu_order_prout2"
+        name="prout prout"
+        parent="menu_order_prout"
+        sequence="10"/>
+
+
+    <menuitem id="menu_order_main"
+        name="Order Requests"
+        parent="menu_order_root"
+        sequence="10"/>
+
+    <menuitem id="menu_order_config"
+        name="Configuration"
+        parent="menu_order_root"
+        sequence="90"/>
+
+    <menuitem id="menu_order_suppliers"
+        name="Suppliers"
+        parent="menu_order_config"
+        sequence="10"/>
+
+    <menuitem id="menu_order_destinations"
+        name="Destinations"
+        parent="menu_order_config"
+        sequence="20"/>
+
+    <menuitem id="menu_order_tickets"
+        name="Tickets"
+        parent="menu_order_config"
+        sequence="30"/>
+</odoo>
