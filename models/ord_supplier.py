@@ -1,8 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
-import fields
-
 
 class OrdSupplier(models.Model):
     _name = 'ord.supplier'
@@ -16,4 +14,6 @@ class OrdSupplier(models.Model):
     phone = fields.Char(string="Phone", required=True)
     mail = fields.Char(string="Email", required=True)
     contact_name = fields.Char(string="Contact name", required=True)
-    status_id = fields.Many2one('ord_status', string='Status', required=True)
+    status_id = fields.Many2one('ord.status', string='Status', required=True, ondelete='cascade')
+    order_ids = fields.One2many('ord.main', 'order_id', string='Orders')
+

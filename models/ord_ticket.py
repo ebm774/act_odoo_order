@@ -1,8 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
-import fields
-
 
 class OrdTicket(models.Model):
     _name = 'ord.ticket'
@@ -11,3 +9,5 @@ class OrdTicket(models.Model):
 
     subject = fields.Char(string="Subject", required=True)
     description = fields.Char(string="Description", required=False)
+
+    order_ids = fields.One2many('ord.main', 'ticket_id', string='Orders ticket')

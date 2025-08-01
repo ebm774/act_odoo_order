@@ -33,10 +33,29 @@ class OrdAttachmentLeg(models.Model):
     file_extension = fields.Char(string='File Extension', size=50)
 
     # SQL: Attachment (image) → Odoo: Binary
-    attachment_data = fields.Binary(string='Attachment Data')
+    attachment_data = fields.Binary(
+        string='Attachment Data',
+        attachment=True,
+        help='File attachment from legacy system')
+
+    attachment_name = fields.Char(
+        string='Attachment Name',
+        compute='_compute_attachment_name',
+        help='Display name for the attachment'
+    )
 
     # SQL: Source (nvarchar(50)) → Odoo: Char
     source = fields.Char(string='Source', size=50)
 
     # SQL: DateAdded (datetime) → Odoo: Datetime
     date_added = fields.Datetime(string='Date Added', default=fields.Datetime.now)
+
+    @api.depends('filename', 'file_extension')
+    def _compute_attachment_name(self):
+        for record in self:
+            if record.filename and record.file_extension:
+                record.attachment_name = f"{record.filename}.{record.file_extension}"
+            elif record.filename:
+                record.attachment_name = record.filename
+            else:
+                record.attachment_name = "Untitled"
