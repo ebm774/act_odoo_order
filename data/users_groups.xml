@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- to approve orders -->
+        <record id="group_order_approver" model="res.groups">
+            <field name="name">Order Approver</field>
+            <field name="category_id" ref="base.module_category_administration"/>
+            <field name="implied_ids" eval="[(4, ref('group_order_user'))]"/>
+            <field name="comment">Users who can approve order requests</field>
+        </record>
+
+        <record id="user_order_approver_a" model="res.users">
+            <field name="name">Order Approver A</field>
+            <field name="login">order.approver.a</field>
+            <field name="password">demo123</field>
+            <field name="email">approver.a@autocontrole.be</field>
+            <field name="groups_id" eval="[(4, ref('group_order_approver'))]"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="user_order_approver_b" model="res.users">
+            <field name="name">Order Approver B</field>
+            <field name="login">order.approver.b</field>
+            <field name="password">demo123</field>
+            <field name="email">approver.b@autocontrole.be</field>
+            <field name="groups_id" eval="[(4, ref('group_order_approver'))]"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="active" eval="True"/>
+        </record>
+
+
+    </data>
+</odoo>

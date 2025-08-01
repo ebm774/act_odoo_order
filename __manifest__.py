@@ -39,6 +39,7 @@
 
         # Data
         'data/sequence.xml',
+        'data/users_groups.xml',
 
         # Views
         'views/ord_main_views.xml',

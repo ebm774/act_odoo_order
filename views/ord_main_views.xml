@@ -74,10 +74,9 @@
                         <group string="Order Information">
                             <field name="creation_date"/>
                             <field name="type"/>
-                            <field name="ticket_id"/>
                         </group>
                         <group string="People">
-                            <field name="owner_id"/>
+                            <field name="owner_id" readonly="1"/>
                             <field name="approver_id"/>
                         </group>
                     </group>
@@ -91,6 +90,13 @@
                         </group>
                     </group>
                     <notebook>
+                        <page string="ticket description">
+                            <group>
+                                <field name="new_ticket_subject" string="Subject"/>
+                                <field name="new_ticket_description" string="Description"/>
+                            </group>
+                        </page>
+
                         <page string="Attachments">
                             <field name="attachment_ids">
                                 <list>

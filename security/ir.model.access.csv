@@ -21,3 +21,7 @@ access_ord_destination_dir,ord.destination.dir,model_ord_destination,group_order
 access_ord_supplier_status_dev,ord.supplier.status.dev,model_ord_supplier_status,group_order_dev,1,1,1,1
 access_ord_supplier_status_user,ord.supplier.status.user,model_ord_supplier_status,group_order_user,1,0,0,0
 access_ord_supplier_status_dir,ord.supplier.status.dir,model_ord_supplier_status,group_order_dir,1,1,1,1
+access_ord_main_approver,ord.main.approver,model_ord_main,group_order_approver,1,1,1,1
+access_ord_main_viewer,ord.main.viewer,model_ord_main,group_order_viewer,1,0,0,0
+access_ord_attachment_approver,ord.attachment.approver,model_ord_attachment,group_order_approver,1,1,1,1
+access_ord_attachment_viewer,ord.attachment.viewer,model_ord_attachment,group_order_viewer,1,0,0,0
