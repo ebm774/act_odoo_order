@@ -37,9 +37,12 @@
         'security/security.xml',
         'security/ir.model.access.csv',
 
+        # Data
+        'data/sequence.xml',
+
         # Views
         'views/ord_main_views.xml',
-        'views/menu_views.xml'
+        'views/menu_views.xml',
 
         # Wizards
 

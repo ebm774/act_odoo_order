@@ -14,6 +14,6 @@ class OrdSupplier(models.Model):
     phone = fields.Char(string="Phone", required=True)
     mail = fields.Char(string="Email", required=True)
     contact_name = fields.Char(string="Contact name", required=True)
-    status_id = fields.Many2one('ord.status', string='Status', required=True, ondelete='cascade')
+    status_id = fields.Many2one('ord.supplier.status', string='Status', required=True, ondelete='cascade')
     order_ids = fields.One2many('ord.main', 'supplier_id', string='Orders')
 

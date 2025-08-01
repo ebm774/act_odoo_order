@@ -10,7 +10,7 @@ class OrdAttachment(models.Model):
 
     filename = fields.Char(string='Filename', required=True, default='none')
     size_kb = fields.Float(string='Size', required=True, digit=(10,2))
-    extension = fields.Char(string='Extension', compute='_compute_extension', store=True, required=True)
+    extension = fields.Char(string='Extension', store=True, required=True)
     date = fields.Date(string='Date', required=True, default=fields.Date.today())
     file = fields.Binary(string='File', attachment=True, required=True)
 
