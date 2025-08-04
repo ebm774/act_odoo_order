@@ -19,7 +19,7 @@ class OrdMain(models.Model):
 
     creation_date = fields.Datetime(string='Creation date', required=True, default=fields.Datetime.now)
     owner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user)
-    destination_id = fields.Many2one('ord.destination', string='Destination', required=True)
+    department_id = fields.Many2one('ord.department', string='Department', required=True)
     approver_id = fields.Many2one(
         'res.users',
         string='Approver',
@@ -50,7 +50,29 @@ class OrdMain(models.Model):
     ], string = 'Order type', required=True, default='material')
 
     attachment_ids = fields.One2many('ord.attachment', 'order_id', string='Attachments')
-    viewer_ids = fields.Many2many('res.groups', string='Viewers')
+
+    viewer_ids = fields.Many2many(
+        'res.groups',
+        string='Viewers',
+        compute='_compute_viewer_ids',
+        store=True,
+        help='Groups that can view this order',
+        hidden='Yes'
+    )
+
+    @api.depends('department_id', 'department_id.viewer_group_id', 'owner_id')
+    def _compute_viewer_ids(self):
+        for record in self:
+            viewer_groups = self.env['res.groups']
+
+            if record.department_id and record.department_id.viewer_group_id:
+                viewer_groups += record.department_id.viewer_group_id
+
+            management_groups = self.env['res.groups'].search([
+                ('name', 'in', ['Order Director', 'Order Approver'])
+            ])
+            viewer_groups += management_groups
+            record.viewer_ids = viewer_groups
 
     @api.model_create_multi
     def create(self, vals_list):

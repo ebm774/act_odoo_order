@@ -13,7 +13,7 @@
                 <field name="type" widget="badge"
                        decoration-primary="type == 'material'"
                        decoration-info="type == 'service'"/>
-                <field name="destination_id"/>
+                <field name="department_id"/>
                 <field name="supplier_id"/>
                 <field name="approver_id" widget="many2one_avatar_user"/>
             </list>
@@ -30,7 +30,7 @@
                 <field name="owner_id"/>
                 <field name="ticket_id"/>
                 <field name="supplier_id"/>
-                <field name="destination_id"/>
+                <field name="department_id"/>
                 <field name="approver_id"/>
 
                 <!-- Filters -->
@@ -52,7 +52,7 @@
                     <filter name="group_by_type" string="Type" context="{'group_by': 'type'}"/>
                     <filter name="group_by_owner" string="Owner" context="{'group_by': 'owner_id'}"/>
                     <filter name="group_by_approver" string="Approver" context="{'group_by': 'approver_id'}"/>
-                    <filter name="group_by_destination" string="Destination" context="{'group_by': 'destination_id'}"/>
+                    <filter name="group_by_department" string="department" context="{'group_by': 'department_id'}"/>
                 </group>
             </search>
         </field>
@@ -82,11 +82,8 @@
                     </group>
                     <group>
                         <group string="Details">
-                            <field name="destination_id"/>
+                            <field name="department_id"/>
                             <field name="supplier_id"/>
-                        </group>
-                        <group string="Access">
-                            <field name="viewer_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                     <notebook>

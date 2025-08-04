@@ -11,6 +11,12 @@
         parent="menu_order_root"
         action="action_ord_main_list"
         sequence="10"/>
+    
+    <menuitem id="menu_departments"
+        name="departments"
+        parent="menu_order_root"
+        action="action_ord_department"
+        sequence="30"/>
 
 <!--        <menuitem id="menu_supplier"-->
 <!--        name="Suppliers"-->

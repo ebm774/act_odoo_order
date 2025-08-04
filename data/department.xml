@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="department_1" model="ord.department">
+            <field name="name">department 1</field>
+        </record>
+        <record id="department_2" model="ord.department">
+            <field name="name">department 2</field>
+        </record>
+    </data>
+</odoo>

@@ -40,10 +40,13 @@
         # Data
         'data/sequence.xml',
         'data/users_groups.xml',
+        'data/department.xml',
 
         # Views
         'views/ord_main_views.xml',
+        'views/ord_dep_views.xml',
         'views/menu_views.xml',
+
 
         # Wizards
 

@@ -2,7 +2,7 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- to approve orders -->
+
         <record id="group_order_approver" model="res.groups">
             <field name="name">Order Approver</field>
             <field name="category_id" ref="base.module_category_administration"/>
@@ -30,6 +30,18 @@
             <field name="active" eval="True"/>
         </record>
 
+        <record id="group_viewer_dep_1" model="res.groups">
+            <field name="name">Viewer department 1</field>
+            <field name="category_id" ref="base.module_category_administration"/>
+            <field name="implied_ids" eval="[(4, ref('group_order_user'))]"/>
+            <field name="comment">group of department 1</field>
+        </record>
 
+        <record id="group_viewer_dep_2" model="res.groups">
+            <field name="name">Viewer department 2</field>
+            <field name="category_id" ref="base.module_category_administration"/>
+            <field name="implied_ids" eval="[(4, ref('group_order_user'))]"/>
+            <field name="comment">group of department 2</field>
+        </record>
     </data>
 </odoo>
