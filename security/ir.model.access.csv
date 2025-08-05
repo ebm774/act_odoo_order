@@ -25,3 +25,6 @@ access_ord_main_approver,ord.main.approver,model_ord_main,group_order_approver,1
 access_ord_main_viewer,ord.main.viewer,model_ord_main,group_order_viewer,1,0,0,0
 access_ord_attachment_approver,ord.attachment.approver,model_ord_attachment,group_order_approver,1,1,1,1
 access_ord_attachment_viewer,ord.attachment.viewer,model_ord_attachment,group_order_viewer,1,0,0,0
+access_ord_supplier_status_log_dev,ord.supplier.status.log.dev,model_ord_supplier_status_log,group_order_dev,1,1,1,1
+access_ord_supplier_status_log_user,ord.supplier.status.log.user,model_ord_supplier_status_log,group_order_user,1,0,0,0
+access_ord_supplier_status_log_dir,ord.supplier.status.log.dir,model_ord_supplier_status_log,group_order_dir,1,1,1,1

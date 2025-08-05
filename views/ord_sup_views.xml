@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-<!--    &lt;!&ndash; List view &ndash;&gt;-->
-<!--    <record id="view_ord_department_list" model="ir.ui.view">-->
-<!--        <field name="name">ord.department.list</field>-->
-<!--        <field name="model">ord.department</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <list>-->
-<!--                <field name="name"/>-->
-<!--                <field name="viewer_group_id" readonly="1"/>-->
-<!--                <field name="user_count"/>-->
-<!--            </list>-->
-<!--        </field>-->
-<!--    </record>-->
+    <!-- List view -->
+    <record id="view_ord_supplier_list" model="ir.ui.view">
+        <field name="name">ord.supplier.list</field>
+        <field name="model">ord.supplier</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="contact_name" />
+                <field name="phone" />
+                <field name="mail" />
+                <field name="status_id"/>
+                <field name="order_count"/>
+            </list>
+        </field>
+    </record>
 
     <!-- Form View -->
     <record id="view_ord_supplier_form" model="ir.ui.view">
@@ -37,10 +40,56 @@
                             <field name="number" />
                             <field name="city" />
                         </group>
+                    </group>
+                    <notebook>
+                        <page string="Status" invisible="not id">
+                            <field name="status_id" context="{'form_view_ref': 'order.view_ord_supplier_status_form_with_log'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Enhanced Status Form View with Change Log -->
+    <record id="view_ord_supplier_status_form_with_log" model="ir.ui.view">
+        <field name="name">ord.supplier.status.form.with.log</field>
+        <field name="model">ord.supplier.status</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="status" readonly="1" widget="badge"
+                                   decoration-success="status == 'approved'"
+                                   decoration-warning="status == 'new'"
+                                   decoration-danger="status == 'non-approved'"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Validation Criteria">
+                            <field name="price"/>
+                            <field name="delivery"/>
+                            <field name="after_sale"/>
+                            <field name="bill"/>
+                        </group>
                         <group>
-                            <field name="status_id" readonly="not id"/>
+                            <list>
+                                <field name="status_reason"/>
+                                <field name="change_made"/>
+                            </list>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Change History">
+                            <field name="change_log_ids" readonly="1">
+                                <list>
+                                    <field name="changes"/>
+                                    <field name="reason"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

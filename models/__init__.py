@@ -7,3 +7,4 @@ from . import ord_attachment
 from . import ord_supplier
 from . import ord_department
 from . import ord_supplier_status
+from . import ord_supplier_status_log

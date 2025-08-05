@@ -24,3 +24,14 @@ class OrdSupplier(models.Model):
         for record in self:
             record.order_count = len(record.order_ids)
 
+    def create(self, vals_list):
+        suppliers = super().create(vals_list)
+
+        for supplier in suppliers:
+
+            self.env['ord.supplier.status'].create({
+                'supplier_id': supplier.id,
+
+            })
+
+        return suppliers
