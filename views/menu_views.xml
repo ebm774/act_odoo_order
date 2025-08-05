@@ -13,9 +13,15 @@
         sequence="10"/>
     
     <menuitem id="menu_departments"
-        name="departments"
+        name="Departments"
         parent="menu_order_root"
         action="action_ord_department"
+        sequence="30"/>
+
+        <menuitem id="menu_suppliers"
+        name="Suppliers"
+        parent="menu_order_root"
+        action="action_ord_supplier"
         sequence="30"/>
 
 <!--        <menuitem id="menu_supplier"-->

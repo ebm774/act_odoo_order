@@ -44,6 +44,7 @@
 
         # Views
         'views/ord_main_views.xml',
+        'views/ord_sup_views.xml',
         'views/ord_dep_views.xml',
         'views/menu_views.xml',
 
