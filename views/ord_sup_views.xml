@@ -67,23 +67,25 @@
                         </h1>
                     </div>
                     <group>
-                        <group string="Validation Criteria">
-                            <field name="price"/>
-                            <field name="delivery"/>
-                            <field name="after_sale"/>
-                            <field name="bill"/>
+                        <group string="Validation Criteria" >
+                            <field name="price"  readonly="not status_reason"/>
+                            <field name="delivery"  readonly="not status_reason"/>
+                            <field name="after_sale"  readonly="not status_reason"/>
+                            <field name="bill"  readonly="not status_reason"/>
                         </group>
-                        <group>
-                            <list>
-                                <field name="status_reason"/>
-                                <field name="change_made"/>
-                            </list>
+                        <group string="Change Information">
+                            <field name="status_reason"
+                                   placeholder="Why are you making this change?"
+                                   required="price or delivery or after_sale or bill" />
+
                         </group>
                     </group>
                     <notebook>
                         <page string="Change History">
                             <field name="change_log_ids" readonly="1">
-                                <list>
+                                <list default_order="change_date desc">
+                                    <field name="change_date"/>
+                                    <field name="user_id" widget="many2one_avatar_user"/>
                                     <field name="changes"/>
                                     <field name="reason"/>
                                 </list>

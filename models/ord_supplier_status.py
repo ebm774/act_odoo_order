@@ -23,7 +23,6 @@ class OrdSupplierStatus(models.Model):
     status_reason = fields.Text(string='Reason')
     change_made = fields.Text(string='Change made')
 
-
     change_log_ids = fields.One2many('ord.supplier.status.log', 'status_id', string='Change History')
 
     _sql_constraints = [
@@ -34,20 +33,56 @@ class OrdSupplierStatus(models.Model):
     @api.onchange('price', 'delivery', 'after_sale','bill')
     def _compute_status(self):
         for record in self:
+
+            if any([record.price, record.delivery, record.after_sale, record.bill]):
+                if not record.status_reason :
+                    return {
+                        'warning': {
+                            'title': _('Required Information Missing'),
+                            'message': _(
+                                'You must fill "Reason" fields before saving. '
+                                'These changes will not be saved without this information.'
+                            )
+                        }
+                    }
+
             if record.price and record.delivery and record.after_sale and record.bill:
                 record.status = 'approved'
             else:
                 record.status = 'non-approved'
 
     def write(self, vals):
+        for record in self:
+            validation_fields = ['price','delivery','after_sale','bill']
+            changed_fields = []
 
-        if ((vals.get('price') and not self.price) or
-                (vals.get('delivery') and not self.delivery) or
-                (vals.get('after_sale') and not self.after_sale) or
-                (vals.get('bill') and not self.bill)):
+            for field in validation_fields:
+                if field in vals and vals[field] != getattr(record, field): #Only proceeds if the field is being updated AND the value is actually different
+                    field_label = record._fields[field].string
+                    old_value = getattr(record, field)
+                    new_value = vals[field]
+                    changed_fields.append(f"{field_label}: {old_value} → {new_value}")
 
-            if self.env.user not in self.validated_by:
-                vals['validated_by'] = [(4, self.env.user.id)]
+            if changed_fields:
+                reason = vals.get('status_reason', record.status_reason)
+                change_made = vals.get('change_made', record.change_made)
+
+                if not reason :
+                    raise UserError(_(
+                        'When changing validation criteria, you must provide '
+                        '"Reason" information.'
+                    ))
+
+                self.env['ord.supplier.status.log'].create({
+                    'status_id': record.id,
+                    'changes': ', '.join(changed_fields),
+                    'reason': reason,
+                    'user_id': self.env.user.id,
+                    'change_date': fields.Datetime.now()
+                })
+
+                vals['status_reason'] = False
+                vals['change_made'] = False
 
         return super().write(vals)
 
