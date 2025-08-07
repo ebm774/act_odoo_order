@@ -67,11 +67,6 @@ class SupplierStatusWizard(models.TransientModel):
 
         reason = self.status_reason
 
-        _logger.info("###################################### ")
-        _logger.info("wizard action save")
-        _logger.info(self.status)
-        _logger.info("###################################### ")
-
         self.status_id.with_context(change_reason=reason).write({
             'price': self.price,
             'delivery': self.delivery,

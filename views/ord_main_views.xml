@@ -7,7 +7,6 @@
         <field name="arch" type="xml">
             <list default_order="creation_date desc">
                 <field name="reference"/>
-                <field name="creation_date"/>
                 <field name="owner_id" widget="many2one_avatar_user"/>
                 <field name="ticket_id"/>
                 <field name="type" widget="badge"
@@ -77,13 +76,13 @@
                         </group>
                         <group string="People">
                             <field name="owner_id" readonly="1"/>
-                            <field name="approver_id"/>
+                            <field name="approver_id" options="{'no_create': True, 'no_create_edit': True}"/>
                         </group>
                     </group>
                     <group>
                         <group string="Details">
-                            <field name="department_id"/>
-                            <field name="supplier_id"/>
+                            <field name="department_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="supplier_id" options="{'no_create': True, 'no_create_edit': True}"/>
                         </group>
                     </group>
                     <notebook>

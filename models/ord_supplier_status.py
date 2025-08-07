@@ -57,12 +57,6 @@ class OrdSupplierStatus(models.Model):
 
     def write(self, vals):
 
-        _logger.info("###################################### ")
-        _logger.info("ord supplier status write")
-        _logger.info(vals)
-        _logger.info("###################################### ")
-
-
         for record in self:
             validation_fields = ['price','delivery','after_sale','bill']
             changed_fields = []

@@ -54,15 +54,15 @@
                                     icon="fa-edit"/>
                         </group>
                     </group>
-                    <notebook>
+                    <notebook invisible="not id">
                        <page string="Change History">
                            <field name="status_log_ids" readonly="1">
-                               <form>
+                               <list>
                                    <field name="change_date"/>
                                    <field name="user_id"/>
                                    <field name="changes"/>
                                    <field name="reason"/>
-                               </form>
+                               </list>
                            </field>
                         </page>
                     </notebook>

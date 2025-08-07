@@ -8,7 +8,6 @@ class OrdMain(models.Model):
     _description = 'Order main'
     _rec_name = 'reference'
 
-
     reference = fields.Char(
         string='Reference',
         size=50,
@@ -24,7 +23,7 @@ class OrdMain(models.Model):
         'res.users',
         string='Approver',
         required=True,
-        domain=lambda self: [('groups_id', 'in', [self.env.ref('order.group_order_approver').id])]
+        domain=lambda self: [('groups_id', 'in', [self.env.ref('order.group_order_approver').id])],
     )
 
     ticket_id = fields.Many2one('ord.ticket', string='Ticket', required=True)
@@ -43,7 +42,14 @@ class OrdMain(models.Model):
         help='Explain why you need this order and provide any relevant details.'
     )
 
-    supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True)
+    supplier_id = fields.Many2one(
+        'ord.supplier',
+        string='Supplier',
+        required=True,
+        domain="[('status_id.status', '=', 'approved')]"
+    )
+
+
     type = fields.Selection([
         ('material', 'Material'),
         ('service', 'Service')

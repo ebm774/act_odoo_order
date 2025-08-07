@@ -26,6 +26,14 @@ class OrdSupplier(models.Model):
         readonly=True,
     )
 
+    @api.constrains('mail')
+    def _check_email_format(self):
+        for record in self:
+            if record.mail:
+                import re
+                email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+                if not re.match(email_pattern, record.mail):
+                    raise UserError(_('Please enter a valid email address'))
 
     @api.depends('order_ids')
     def _compute_order_count(self):
