@@ -12,3 +12,4 @@ class OrdSupplierStatusLog(models.Model):
     change_date = fields.Datetime(string='Change Date', required=True, default=fields.Datetime.now)
     changes = fields.Char(string='Changes Made', required=True)
     reason = fields.Text(string='Reason', required=True)
+    supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True)

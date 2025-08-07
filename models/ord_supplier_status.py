@@ -88,7 +88,8 @@ class OrdSupplierStatus(models.Model):
                     'changes': ', '.join(changed_fields),
                     'reason': reason,
                     'user_id': self.env.user.id,
-                    'change_date': fields.Datetime.now()
+                    'change_date': fields.Datetime.now(),
+                    'supplier_id': record.supplier_id.id,
                 })
 
                 if 'status_reason' in vals:

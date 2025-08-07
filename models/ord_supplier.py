@@ -17,6 +17,8 @@ class OrdSupplier(models.Model):
     status_id = fields.One2many('ord.supplier.status', 'supplier_id', string='Status')
     order_ids = fields.One2many('ord.main', 'supplier_id', string='Orders')
     order_count = fields.Integer(string='Order Count', compute='_compute_order_count', store=True)
+    status_log_ids = fields.One2many('ord.supplier.status.log', 'supplier_id', string='Status logs')
+
 
     current_status = fields.Selection(
         related='status_id.status',
