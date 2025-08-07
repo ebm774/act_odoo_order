@@ -9,9 +9,6 @@ access_ord_attachment_leg_dir,ord.attachment.leg.dir,model_ord_attachment_leg,gr
 access_ord_attachment_dev,ord.attachment.dev,model_ord_attachment,group_order_dev,1,1,1,1
 access_ord_attachment_user,ord.attachment.user,model_ord_attachment,group_order_user,1,1,1,0
 access_ord_attachment_dir,ord.attachment.dir,model_ord_attachment,group_order_dir,1,1,1,1
-access_ord_ticket_dev,ord.ticket.dev,model_ord_ticket,group_order_dev,1,1,1,1
-access_ord_ticket_user,ord.ticket.user,model_ord_ticket,group_order_user,1,1,1,0
-access_ord_ticket_dir,ord.ticket.dir,model_ord_ticket,group_order_dir,1,1,1,1
 access_ord_supplier_dev,ord.supplier.dev,model_ord_supplier,group_order_dev,1,1,1,1
 access_ord_supplier_user,ord.supplier.user,model_ord_supplier,group_order_user,1,0,0,0
 access_ord_supplier_dir,ord.supplier.dir,model_ord_supplier,group_order_dir,1,1,1,1

@@ -41,6 +41,7 @@
         'data/sequence.xml',
         'data/users_groups.xml',
         'data/department.xml',
+        'data/supplier.xml',
 
         # Views
         'views/ord_main_views.xml',

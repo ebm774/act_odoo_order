@@ -1,6 +1,8 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class OrdMain(models.Model):
@@ -26,20 +28,15 @@ class OrdMain(models.Model):
         domain=lambda self: [('groups_id', 'in', [self.env.ref('order.group_order_approver').id])],
     )
 
-    ticket_id = fields.Many2one('ord.ticket', string='Ticket', required=True)
-    _sql_constraints = [
-        ('unique_ticket', 'UNIQUE(ticket_id)',
-         'Each ticket can only be assigned once!'),
-    ]
 
-    new_ticket_subject = fields.Char(
+    ticket_subject = fields.Char(
         string='Request Subject',
         help='What do you need?',
-        required=True
+        required=True,
     )
-    new_ticket_description = fields.Text(
+    ticket_description = fields.Text(
         string='Request Justification',
-        help='Explain why you need this order and provide any relevant details.'
+        help='Explain why you need this order and provide any relevant details.',
     )
 
     supplier_id = fields.Many2one(
@@ -66,6 +63,12 @@ class OrdMain(models.Model):
         hidden='Yes'
     )
 
+    @api.depends('new_ticket_subject', 'new_ticket_description')
+    def _compute_ticket(self):
+        for order in self:
+            order.new_ticket_subject = order.ticket_id.subject
+            order.new_ticket_description = order.ticket_id.description
+
     @api.depends('department_id', 'department_id.viewer_group_id', 'owner_id')
     def _compute_viewer_ids(self):
         for record in self:
@@ -85,17 +88,7 @@ class OrdMain(models.Model):
         for vals in vals_list:
             if vals.get('reference', '/') == '/':
 
-                #for reference
                 vals['reference'] = self.env['ir.sequence'].next_by_code('ord.main.sequence') or '/'
 
-                #for ticket
-                if 'new_ticket_subject' in vals and vals['new_ticket_subject']:
-                    ticket_vals = {
-                        'subject': vals.pop('new_ticket_subject'),
-                        'description': vals.pop('new_ticket_description',''),
-                    }
-
-                    ticket = self.env['ord.ticket'].create(ticket_vals)
-                    self.ticket_id = ticket.id
 
         return super().create(vals_list)

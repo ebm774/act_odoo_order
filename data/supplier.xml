@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="supplier_office_supplies" model="ord.supplier">
+            <field name="name">Office Supplies Co.</field>
+            <field name="street">Main Street</field>
+            <field name="number">123</field>
+            <field name="city">Brussels</field>
+            <field name="phone">+32 2 123 45 67</field>
+            <field name="mail">contact@officesupplies.be</field>
+            <field name="contact_name">Jean Dupont</field>
+        </record>
+
+    </data>
+</odoo>
