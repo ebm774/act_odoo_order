@@ -94,13 +94,28 @@
                         </page>
 
                         <page string="Attachments">
-                            <field name="attachment_ids">
+                            <field name="attachment_ids" context="{'default_order_id': id}">
                                 <list>
                                     <field name="filename"/>
-                                    <field name="size_kb"/>
+                                    <field name="size_mb"/>
                                     <field name="extension"/>
                                     <field name="date"/>
                                 </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="filename" required="1"/>
+                                            <field name="extension"/>
+                                        </group>
+                                        <group>
+                                            <field name="size_mb" readonly="1"/>
+                                            <field name="date"/>
+                                        </group>
+                                    </group>
+                                    <group string="File">
+                                        <field name="file" filename="filename" required="1"/>
+                                    </group>
+                                </form>
                             </field>
                         </page>
                     </notebook>
