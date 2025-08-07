@@ -1,6 +1,8 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class SupplierStatusWizard(models.TransientModel):
     _name = 'supplier.status.wizard'
@@ -9,17 +11,33 @@ class SupplierStatusWizard(models.TransientModel):
     supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True, readonly=True)
     status_id = fields.Many2one('ord.supplier.status', string='Status Record', required=True, readonly=True)
 
-    status = fields.Selection(
-        related='status_id.status',
+    status = fields.Selection([
+        ('new', 'New'),
+        ('approved', 'Approved'),
+        ('non-approved', 'Non-Approved'),
+    ],
         string='Status',
-        readonly=True
+        compute='_compute_status',
     )
-    price = fields.Boolean(related='status_id.price', string='Price')
-    delivery = fields.Boolean(related='status_id.delivery', string='Delivery')
-    after_sale = fields.Boolean(related='status_id.after_sale', string='After Sale')
-    bill = fields.Boolean(related='status_id.bill', string='Bill')
+
+
+    price = fields.Boolean(string='Price')
+    delivery = fields.Boolean(string='Delivery')
+    after_sale = fields.Boolean(string='After Sale')
+    bill = fields.Boolean(string='Bill')
 
     status_reason = fields.Text(string='Reason for Change', required=True)
+
+
+    @api.depends('price', 'delivery', 'after_sale','bill')
+    def _compute_status(self):
+
+        for record in self:
+
+            if record.price and record.delivery and record.after_sale and record.bill:
+                record.status = 'approved'
+            else:
+                record.status = 'non-approved'
 
     @api.model
     def default_get(self, fields_list):
@@ -32,6 +50,11 @@ class SupplierStatusWizard(models.TransientModel):
                 res.update({
                     'supplier_id': supplier.id,
                     'status_id': supplier.status_id.id,
+                    'price' : supplier.status_id.price,
+                    'delivery': supplier.status_id.delivery,
+                    'after_sale': supplier.status_id.after_sale,
+                    'bill': supplier.status_id.bill,
+                    'status': supplier.status_id.status,
                 })
 
         return res
@@ -42,12 +65,19 @@ class SupplierStatusWizard(models.TransientModel):
         if not self.status_reason:
             raise UserError(_('Please provide a reason for the changes'))
 
-        self.status_id.write({
+        reason = self.status_reason
+
+        _logger.info("###################################### ")
+        _logger.info("wizard action save")
+        _logger.info(self.status)
+        _logger.info("###################################### ")
+
+        self.status_id.with_context(change_reason=reason).write({
             'price': self.price,
             'delivery': self.delivery,
             'after_sale': self.after_sale,
             'bill': self.bill,
-            'status_reason': self.status_reason,
+            'status': self.status,
         })
 
         return {'type': 'ir.actions.act_window_close'}

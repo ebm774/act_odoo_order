@@ -14,21 +14,15 @@ class OrdSupplier(models.Model):
     phone = fields.Char(string="Phone", required=True)
     mail = fields.Char(string="Email", required=True)
     contact_name = fields.Char(string="Contact name", required=True)
+    status_id = fields.One2many('ord.supplier.status', 'supplier_id', string='Status')
+    order_ids = fields.One2many('ord.main', 'supplier_id', string='Orders')
+    order_count = fields.Integer(string='Order Count', compute='_compute_order_count', store=True)
+
     current_status = fields.Selection(
         related='status_id.status',
         string='Current Status',
         readonly=True,
     )
-    status_id = fields.One2many('ord.supplier.status', 'supplier_id', string='Status')
-    order_ids = fields.One2many('ord.main', 'supplier_id', string='Orders')
-    order_count = fields.Integer(string='Order Count', compute='_compute_order_count', store=True)
-
-
-    @api.depends('current_status')
-    def _compute_status(self):
-        for order in self:
-            order.current_status = order.status_id.status
-
 
 
     @api.depends('order_ids')
@@ -45,6 +39,8 @@ class OrdSupplier(models.Model):
                 'supplier_id': supplier.id,
 
             })
+
+
 
         return suppliers
 

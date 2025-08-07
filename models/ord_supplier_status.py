@@ -35,6 +35,7 @@ class OrdSupplierStatus(models.Model):
 
     @api.onchange('price', 'delivery', 'after_sale','bill')
     def _compute_status(self):
+
         for record in self:
 
             if any([record.price, record.delivery, record.after_sale, record.bill]):
@@ -57,7 +58,8 @@ class OrdSupplierStatus(models.Model):
     def write(self, vals):
 
         _logger.info("###################################### ")
-        _logger.info("COUILLE")
+        _logger.info("ord supplier status write")
+        _logger.info(vals)
         _logger.info("###################################### ")
 
 
@@ -73,8 +75,7 @@ class OrdSupplierStatus(models.Model):
                     changed_fields.append(f"{field_label}: {old_value} → {new_value}")
 
             if changed_fields:
-                reason = vals.get('status_reason', record.status_reason)
-                change_made = vals.get('change_made', record.change_made)
+                reason = self.env.context.get('change_reason') or vals.get('status_reason', record.status_reason)
 
                 if not reason :
                     raise UserError(_(
@@ -90,8 +91,13 @@ class OrdSupplierStatus(models.Model):
                     'change_date': fields.Datetime.now()
                 })
 
-                vals['status_reason'] = False
-                vals['change_made'] = False
+                if 'status_reason' in vals:
+                    vals['status_reason'] = False
+                if 'change_made' in vals:
+                    vals['change_made'] = False
+
+
+
 
         return super().write(vals)
 

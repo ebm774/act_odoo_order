@@ -42,10 +42,10 @@
                         </group>
                         <group string="Status" invisible="not id">
                             <field name="current_status" readonly="1"
-                                   widget="badge"
-                                   decoration-success="current_status == 'approved'"
-                                   decoration-warning="current_status == 'new'"
-                                   decoration-danger="current_status == 'non-approved'"/>
+                               widget="badge"
+                               decoration-success="current_status == 'approved'"
+                               decoration-warning="current_status == 'new'"
+                               decoration-danger="current_status == 'non-approved'"/>
 
                             <button name="action_open_status_wizard"
                                     type="object"
@@ -58,9 +58,6 @@
                        <page string="Change History">
                            <field name="status_id">
                                 <form>
-                                    <group>
-                                        <field name="status" readonly="1"/>
-                                    </group>
                                     <field name="change_log_ids" readonly="1">
                                         <list default_order="change_date desc">
                                             <field name="change_date"/>
@@ -78,50 +75,6 @@
         </field>
     </record>
 
-    <!-- Enhanced Status Form View with Change Log -->
-    <record id="view_ord_supplier_status_form_with_log" model="ir.ui.view">
-        <field name="name">ord.supplier.status.form.with.log</field>
-        <field name="model">ord.supplier.status</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="status" widget="badge"
-                                   decoration-success="status == 'approved'"
-                                   decoration-warning="status == 'new'"
-                                   decoration-danger="status == 'non-approved'"/>
-                        </h1>
-                    </div>
-                    <group>
-                        <group string="Validation Criteria" >
-                            <field name="price"  readonly="not status_reason"/>
-                            <field name="delivery"  readonly="not status_reason"/>
-                            <field name="after_sale"  readonly="not status_reason"/>
-                            <field name="bill"  readonly="not status_reason"/>
-                        </group>
-                        <group string="Change Information">
-                            <field name="status_reason"
-                                   placeholder="Why are you making this change?"
-                                   required="price or delivery or after_sale or bill" />
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Change History">
-                            <field name="change_log_ids" readonly="1">
-                                <list default_order="change_date desc">
-                                    <field name="change_date"/>
-                                    <field name="user_id" widget="many2one_avatar_user"/>
-                                    <field name="changes"/>
-                                    <field name="reason"/>
-                                </list>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
 
        <!-- Search View -->
     <record id="view_ord_supplier_search" model="ir.ui.view">
