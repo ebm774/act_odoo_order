@@ -9,7 +9,7 @@ class OrdAttachment(models.Model):
     _rec_name = 'filename'
 
     filename = fields.Char(string='Filename', required=True, default='none')
-    extension = fields.Char(string='Extension', store=True, required=True)
+    extension = fields.Char(string='Extension', store=True)
     date = fields.Date(string='Date', required=True, default=fields.Date.today())
     file = fields.Binary(string='File', attachment=True, required=True)
     order_id = fields.Many2one('ord.main', string='Order', required=True)
@@ -42,11 +42,11 @@ class OrdAttachment(models.Model):
         for record in self:
             if record.file:
                 file_size_bytes = len(base64.b64decode(record.file))
-                record.file_size_mb = file_size_bytes / (1024 * 1024)
-                if record.file_size_mb > record.max_size_mb:
+                record.size_mb = file_size_bytes / (1024 * 1024)
+                if record.size_mb > record.max_size_mb:
                     raise UserError(
                         _('File size cannot exceed %d MB. Current size: %.2f MB')
-                        % (record.max_size_mb, record.file_size_mb)
+                        % (record.max_size_mb, record.size_mb)
                     )
 
     @api.constrains('extension')
@@ -59,18 +59,12 @@ class OrdAttachment(models.Model):
 
         for record in self:
 
-            if record.extension:
-
                 ext_lower = record.extension.lower()
-
-                if ext_lower not in [ext.lower() for ext in allowed_extensions]:
-
+                if ext_lower not in allowed_extensions:
                     raise UserError(
                         _('File extension "%s" is not allowed. Allowed extensions: %s')
                         % (record.extension, ', '.join(allowed_extensions))
                     )
-                else :
-                    record.extension = ext_lower
 
     @api.depends('filename', 'extension')
     def _compute_full_filename(self):

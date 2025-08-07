@@ -96,20 +96,20 @@
                         <page string="Attachments">
                             <field name="attachment_ids" context="{'default_order_id': id}">
                                 <list>
-                                    <field name="filename"/>
+                                    <field name="filename" readonly="1"/>
                                     <field name="size_mb"/>
-                                    <field name="extension"/>
+                                    <field name="extension" readonly="1"/>
                                     <field name="date"/>
                                 </list>
                                 <form>
                                     <group>
                                         <group>
                                             <field name="filename" required="1"/>
-                                            <field name="extension"/>
+                                            <field name="extension" readonly="1"/>
                                         </group>
                                         <group>
                                             <field name="size_mb" readonly="1"/>
-                                            <field name="date"/>
+                                            <field name="date" readonly="1"/>
                                         </group>
                                     </group>
                                     <group string="File">
