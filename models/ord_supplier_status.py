@@ -1,6 +1,9 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
+import logging
+_logger = logging.getLogger(__name__)
+
 
 class OrdSupplierStatus(models.Model):
     _name = 'ord.supplier.status'
@@ -52,6 +55,12 @@ class OrdSupplierStatus(models.Model):
                 record.status = 'non-approved'
 
     def write(self, vals):
+
+        _logger.info("###################################### ")
+        _logger.info("COUILLE")
+        _logger.info("###################################### ")
+
+
         for record in self:
             validation_fields = ['price','delivery','after_sale','bill']
             changed_fields = []

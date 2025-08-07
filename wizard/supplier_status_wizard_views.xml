@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard Form View -->
+    <record id="view_supplier_status_wizard_form" model="ir.ui.view">
+        <field name="name">supplier.status.wizard.form</field>
+        <field name="model">supplier.status.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group string="Supplier Information">
+                        <field name="supplier_id" readonly="1"/>
+                        <field name="status" readonly="1" widget="badge"
+                               decoration-success="status == 'approved'"
+                               decoration-warning="status == 'new'"
+                               decoration-danger="status == 'non-approved'"/>
+                    </group>
+                </group>
+
+                <group string="Change Information">
+                    <field name="status_reason"
+                           placeholder="Why are you making this change?"
+                           required="1"/>
+                </group>
+
+                <group string="Validation Criteria">
+                    <field name="price" readonly="not status_reason"/>
+                    <field name="delivery" readonly="not status_reason"/>
+                    <field name="after_sale" readonly="not status_reason"/>
+                    <field name="bill" readonly="not status_reason"/>
+                </group>
+
+                <footer>
+                    <button name="action_save_changes"
+                            type="object"
+                            string="Save Changes"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            special="cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_supplier_status_wizard" model="ir.actions.act_window">
+        <field name="name">Edit Supplier Status</field>
+        <field name="res_model">supplier.status.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_ord_supplier"/>
+        <field name="binding_view_types">form</field>
+    </record>
+</odoo>

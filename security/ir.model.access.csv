@@ -28,3 +28,6 @@ access_ord_attachment_viewer,ord.attachment.viewer,model_ord_attachment,group_or
 access_ord_supplier_status_log_dev,ord.supplier.status.log.dev,model_ord_supplier_status_log,group_order_dev,1,1,1,1
 access_ord_supplier_status_log_user,ord.supplier.status.log.user,model_ord_supplier_status_log,group_order_user,1,0,0,0
 access_ord_supplier_status_log_dir,ord.supplier.status.log.dir,model_ord_supplier_status_log,group_order_dir,1,1,1,1
+access_ord_supplier_wizard_log_dev,ord.supplier.wizard.log.dev,model_supplier_status_wizard,group_order_dev,1,1,1,1
+access_ord_supplier_wizard_log_user,ord.supplier.wizard.log.user,model_supplier_status_wizard,group_order_user,1,0,0,0
+access_ord_supplier_wizard_log_dir,ord.supplier.wizard.log.dir,model_supplier_status_wizard,group_order_dir,1,1,1,1
