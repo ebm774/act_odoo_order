@@ -71,7 +71,7 @@
                     </div>
                     <group>
                         <group string="Order Information">
-                            <field name="creation_date"/>
+                            <field name="creation_date" readonly="1"/>
                             <field name="type"/>
                         </group>
                         <group string="People">
