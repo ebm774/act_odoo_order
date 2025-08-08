@@ -10,6 +10,12 @@ class OrdMain(models.Model):
     _description = 'Order main'
     _rec_name = 'reference'
 
+    status = fields.Selection([
+        ('waiting', 'Waiting'),
+        ('refused', 'Refused'),
+        ('accepted', 'Accepted'),
+    ], default='waiting', string='Order status')
+
     reference = fields.Char(
         string='Reference',
         size=50,

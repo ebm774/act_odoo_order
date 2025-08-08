@@ -90,6 +90,7 @@
                             <group>
                                 <field name="ticket_subject" string="Subject"/>
                                 <field name="ticket_description" string="Description"/>
+                                <field name="status" string="Status"/>
                             </group>
                         </page>
 
