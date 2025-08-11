@@ -97,24 +97,30 @@
                         <page string="Attachments">
                             <field name="attachment_ids" context="{'default_order_id': id}">
                                 <list>
-                                    <field name="filename" readonly="1"/>
-                                    <field name="size_mb"/>
-                                    <field name="extension" readonly="1"/>
-                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="size_mb" />
+                                    <field name="mimetype"/>
+                                    <field name="create_date"/>
+                                    <button name="action_preview" type="object" string="Preview" icon="fa-eye"/>
+                                    <button name="action_download" type="object" string="Download" icon="fa-download"/>
                                 </list>
                                 <form>
+                                    <header>
+                                        <button name="action_preview" type="object" string="Preview" class="btn-info"/>
+                                        <button name="action_download" type="object" string="Download" class="btn-secondary"/>
+                                    </header>
                                     <group>
                                         <group>
-                                            <field name="filename" required="1"/>
-                                            <field name="extension" readonly="1"/>
+                                            <field name="name" string="Filename"/>
+                                            <field name="mimetype" readonly="1"/>
                                         </group>
                                         <group>
                                             <field name="size_mb" readonly="1"/>
-                                            <field name="date" readonly="1"/>
+                                            <field name="create_date" readonly="1"/>
                                         </group>
                                     </group>
                                     <group string="File">
-                                        <field name="file" filename="filename" required="1"/>
+                                        <field name="datas" filename="name"/>
                                     </group>
                                 </form>
                             </field>

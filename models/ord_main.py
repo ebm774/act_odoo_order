@@ -70,12 +70,12 @@ class OrdMain(models.Model):
     )
 
     is_delivered = fields.Boolean(string="Delivered", default=False)
-    delivery_date = fields.Datetime(string='Delivery date')
+    delivery_date = fields.Date(string='Delivery date')
 
     @api.onchange('is_delivered')
     def _onchange_is_delivered(self):
         if self.is_delivered:
-            self.delivery_date = fields.Datetime.now()
+            self.delivery_date = fields.Date.today()
         else:
             self.delivery_date = False
 
