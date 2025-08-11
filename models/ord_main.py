@@ -69,6 +69,16 @@ class OrdMain(models.Model):
         hidden='Yes'
     )
 
+    is_delivered = fields.Boolean(string="Delivered", default=False)
+    delivery_date = fields.Datetime(string='Delivery date')
+
+    @api.onchange('is_delivered')
+    def _onchange_is_delivered(self):
+        if self.is_delivered:
+            self.delivery_date = fields.Datetime.now()
+        else:
+            self.delivery_date = False
+
     @api.depends('new_ticket_subject', 'new_ticket_description')
     def _compute_ticket(self):
         for order in self:

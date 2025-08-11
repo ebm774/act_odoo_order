@@ -90,7 +90,7 @@
                             <group>
                                 <field name="ticket_subject" string="Subject"/>
                                 <field name="ticket_description" string="Description"/>
-                                <field name="status" string="Status"/>
+                                <field name="status" string="Status" readonly="not id"/>
                             </group>
                         </page>
 
@@ -118,6 +118,13 @@
                                     </group>
                                 </form>
                             </field>
+                        </page>
+                        <page string="Delivery">
+                            <group>
+                                <field name="is_delivered" string="Mark as Delivered" readonly="not id"/>
+                                <field name="delivery_date" string="Delivery Date" readonly="1"
+                                       invisible="not is_delivered"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
