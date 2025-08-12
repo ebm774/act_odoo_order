@@ -91,9 +91,6 @@ class OrdSupplierStatus(models.Model):
                 if 'change_made' in vals:
                     vals['change_made'] = False
 
-
-
-
         return super().write(vals)
 
 

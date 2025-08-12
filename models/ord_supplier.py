@@ -18,7 +18,7 @@ class OrdSupplier(models.Model):
     order_ids = fields.One2many('ord.main', 'supplier_id', string='Orders')
     order_count = fields.Integer(string='Order Count', compute='_compute_order_count', store=True)
     status_log_ids = fields.One2many('ord.supplier.status.log', 'supplier_id', string='Status logs')
-
+    VAT = fields.Char(string='VAT')
 
     current_status = fields.Selection(
         related='status_id.status',
@@ -49,8 +49,6 @@ class OrdSupplier(models.Model):
                 'supplier_id': supplier.id,
 
             })
-
-
 
         return suppliers
 
