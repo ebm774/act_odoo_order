@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="order_main1" model="ord.main">
+<!--        <field name="owner_id" ref="base.user_admin"/>-->
+        <field name="department_id" ref="department_1"/>
+        <field name="approver_id" ref="user_order_approver_a"/>
+        <field name="ticket_subject">Sample Order Request - Office Supplies</field>
+        <field name="ticket_description">Need to restock office supplies for the marketing department including paper,
+            pens, and printer cartridges.
+        </field>
+        <field name="supplier_id" ref="supplier_office_supplies"/>
+        <field name="type">material</field>
+        <field name="creation_date">2024-01-15 09:00:00</field>
+    </record>
+</odoo>

@@ -106,5 +106,28 @@ class OrdMain(models.Model):
 
                 vals['reference'] = self.env['ir.sequence'].next_by_code('ord.main.sequence') or '/'
 
+        records = super().create(vals_list)
 
-        return super().create(vals_list)
+        for record in records:
+            record._send_approval_notification()
+
+        return records
+
+    def _send_approval_notification(self):
+        self.ensure_one()
+        template = self.env.ref('order.mail_template_new_order_approval', raise_if_not_found=False)
+
+        if not template:
+            _logger.warning(f'Email template not found for order {self.reference}')
+            return
+
+        if not self.approver_id.email:
+            _logger.warning(f'Approver {self.approver_id.name} has no email address for order {self.reference}')
+            return
+
+        try:
+            template.send_mail(self.id, force_send=True, raise_exception=False)
+            _logger.info(f'Approval notification sent to {self.approver_id.name} for order {self.reference}')
+
+        except Exception as e:
+            _logger.error(f'Failed to send approval notification for order {self.reference}: {str(e)}')
