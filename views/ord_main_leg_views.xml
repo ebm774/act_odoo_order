@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- List view -->
+    <record id="view_ord_main_leg_list" model="ir.ui.view">
+        <field name="name">ord.main.leg.list</field>
+        <field name="model">ord.main.leg</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence"/>
+                <field name="subject" />
+                <field name="order_date" />
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_ord_main_leg_search" model="ir.ui.view">
+        <field name="name">ord.main.leg.search</field>
+        <field name="model">ord.main.leg</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="reference"/>
+                <field name="subject"/>
+                <field name="order_year"/>
+                <field name="order_type"/>
+                <field name="order_date"/>
+                <field name="display_name"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_ord_main_leg" model="ir.actions.act_window">
+        <field name="name">Legacy orders</field>
+        <field name="res_model">ord.main.leg</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_ord_main_leg_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No orders created yet
+            </p>
+            <p>
+                Import legacy data to get started.
+            </p>
+        </field>
+    </record>
+</odoo>

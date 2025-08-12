@@ -38,7 +38,7 @@
         <menuitem id="menu_legacy_ord"
                   name="Orders"
                   parent="menu_order_legacy"
-                  action="action_ord_leg"
+                  action="action_ord_main_leg"
                   />
 
 
