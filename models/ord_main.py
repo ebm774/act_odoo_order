@@ -108,26 +108,76 @@ class OrdMain(models.Model):
 
         records = super().create(vals_list)
 
-        for record in records:
-            record._send_approval_notification()
+        # Only send notifications if we're not installing/updating modules
+        if not self.env.context.get('install_mode') and not self._context.get('module_installation'):
+            for record in records:
+                # Additional check: only send if SMTP is configured
+                mail_servers = self.env['ir.mail_server'].search([])
+                if mail_servers:
+                    record._send_approval_notification()
+                else:
+                    _logger.info(
+                        f'Skipping email notification for order {record.reference} - no SMTP server configured')
 
         return records
 
+    # def _send_approval_notification(self):
+    #
+    #     _logger.info('##############################')
+    #     _logger.info(f'Starting email notification for order {self.reference}')
+    #     _logger.info(f'Approver: {self.approver_id.name} ({self.approver_id.email})')
+    #     _logger.info('##############################')
+    #
+    #     self.ensure_one()
+    #     template = self.env.ref('order.mail_template_new_order_approval', raise_if_not_found=False)
+    #
+    #
+    #     if not template:
+    #         _logger.warning(f'Email template not found for order {self.reference}')
+    #         return
+    #
+    #     if not self.approver_id.email:
+    #         _logger.warning(f'Approver {self.approver_id.name} has no email address for order {self.reference}')
+    #         return
+    #
+    #     try:
+    #
+    #         template.send_mail(self.id, force_send=True, raise_exception=True)
+    #         _logger.info(f'Approval notification sent to {self.approver_id.name} for order {self.reference}')
+    #
+    #     except Exception as e:
+    #         _logger.error(f'Failed to send approval notification for order {self.reference}: {str(e)}')
+    #         raise
+
     def _send_approval_notification(self):
+        """Send approval notification email"""
         self.ensure_one()
-        template = self.env.ref('order.mail_template_new_order_approval', raise_if_not_found=False)
 
-        if not template:
-            _logger.warning(f'Email template not found for order {self.reference}')
-            return
-
-        if not self.approver_id.email:
-            _logger.warning(f'Approver {self.approver_id.name} has no email address for order {self.reference}')
+        if not self.approver_id or not self.approver_id.email:
+            _logger.warning(f'No approver or approver email for order {self.reference}')
             return
 
         try:
-            template.send_mail(self.id, force_send=True, raise_exception=False)
-            _logger.info(f'Approval notification sent to {self.approver_id.name} for order {self.reference}')
+            # Get the template
+            template = self.env.ref('order.mail_template_new_order_approval', raise_if_not_found=False)
+
+            if not template:
+                _logger.warning(f'Email template not found for order {self.reference}')
+                return
+
+            # Send mail using the template (this handles all rendering automatically)
+            template.send_mail(
+                self.id,
+                force_send=True,
+                raise_exception=False,  # Don't break order creation if email fails
+                email_values={
+                    'email_to': self.approver_id.email,
+                    'email_from': 'no-reply@autocontrole.be'
+                }
+            )
+
+            _logger.info(f'Email sent to {self.approver_id.email} for order {self.reference}')
 
         except Exception as e:
-            _logger.error(f'Failed to send approval notification for order {self.reference}: {str(e)}')
+            _logger.error(f'Email failed for order {self.reference}: {str(e)}')
+            # Don't re-raise - let order creation succeed even if email fails

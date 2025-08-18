@@ -1,13 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="mail_template_new_order" model="mail.template">
-        <field name="name">New Order Request (Simple)</field>
-        <field name="model_id" ref="order.ord_main"/>
-        <field name="subject">New Order: </field>
-        <field name="email_from">noreply@autocontrole.be</field>
-        <field name="email_to">pdra@autocontrole.be</field>
-        <field name="body_html" type="html">
-        </field>
+    <record id="mail_template_new_order_approval" model="mail.template">
+        <field name="name">Order Approval Required</field>
+        <field name="model_id" ref="order.model_ord_main"/>
+        <field name="subject">Order Approval Required: ${object.reference}</field>  <!-- Added dynamic reference -->
+        <field name="email_from">no-reply@autocontrole.be</field>
+        <field name="email_to">pdra@autocontrole.be</field>  <!-- Dynamic approver email -->
+            <field name="body_html" type="html">
+                <div>
+                    <p>Dear <t t-out="object.approver_id.name"/>,</p>
+
+                    <p>A new order request requires your approval:</p>
+
+                    <table style="border-collapse: collapse; width: 100%; margin: 10px 0;">
+                        <tr>
+                            <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Order Reference:</td>
+                            <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.reference"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Requested by:</td>
+                            <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.owner_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Department:</td>
+                            <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.department_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Subject:</td>
+                            <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.ticket_subject"/></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Supplier:</td>
+                            <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.supplier_id.name"/></td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Description:</strong></p>
+                    <div style="margin: 10px 0; padding: 10px; background-color: #f9f9f9; border-left: 4px solid #007c99;">
+                        <t t-out="object.ticket_description or 'No description provided'"/>
+                    </div>
+
+                    <p>Please review and approve this order request.</p>
+
+                    <p>Best regards,<br/>
+                    Order Management System</p>
+                </div>
+            </field>
         <field name="auto_delete" eval="True"/>
     </record>
 </odoo>

@@ -28,7 +28,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'web'],
+    'depends': ['base', 'web', 'mail'],
 
     # always loaded
     # always respect the loading order
@@ -42,9 +42,10 @@
         'data/users_groups.xml',
         'data/department.xml',
         'data/supplier.xml',
-        'data/order_main.xml',
         'data/mail_template.xml',
-        'data/mail_server.xml',
+        'data/order_main.xml',
+
+
 
         # Views
         'views/ord_main_views.xml',
