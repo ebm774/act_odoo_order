@@ -42,7 +42,7 @@
         'data/users_groups.xml',
         'data/department.xml',
         'data/supplier.xml',
-        'data/mail_template.xml',
+        'data/mail_templates.xml',
         'data/order_main.xml',
 
 

@@ -9,6 +9,12 @@
                 <field name="reference"/>
                 <field name="owner_id" widget="many2one_avatar_user"/>
                 <field name="ticket_subject"/>
+                <field name="status" widget="badge"
+                       decoration-warning="status == 'waiting'"
+                       decoration-danger="status == 'refused'"
+                       decoration-success="status == 'accepted'"
+                       />
+
                 <field name="type" widget="badge"
                        decoration-primary="type == 'material'"
                        decoration-info="type == 'service'"/>
@@ -28,6 +34,7 @@
                 <field name="reference"/>
                 <field name="owner_id"/>
                 <field name="ticket_subject"/>
+                <field name="status"/>
                 <field name="supplier_id"/>
                 <field name="department_id"/>
                 <field name="approver_id"/>
