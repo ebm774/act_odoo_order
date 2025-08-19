@@ -87,4 +87,160 @@
             </field>
         <field name="auto_delete" eval="True"/>
     </record>
+
+
+   <record id="mail_template_order_accepted" model="mail.template">
+        <field name="name">Order Accepted Notification</field>
+        <field name="model_id" ref="model_ord_main"/>
+        <field name="subject">Order {{ object.reference }} - Accepted</field>
+        <field name="email_from">no-reply@autocontrole.be</field>
+        <field name="email_to">{{ object.owner_id.email }}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background-color: #28a745; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+                    <h1 style="margin: 0; font-size: 24px;">✅ Order Accepted</h1>
+                </div>
+
+                <div style="padding: 30px; background-color: #f8f9fa; border-radius: 0 0 8px 8px;">
+                    <p style="font-size: 16px; margin-bottom: 20px;">Dear <t t-out="object.owner_id.name"/>,</p>
+
+                    <p style="font-size: 16px; margin-bottom: 25px;">
+                        Good news! Your order request has been <strong style="color: #28a745;">accepted</strong> and will be processed.
+                    </p>
+
+                    <div style="background-color: white; padding: 20px; border-radius: 5px; border-left: 4px solid #28a745; margin: 25px 0;">
+                        <h3 style="color: #333; margin-top: 0;">Order Details</h3>
+                        <table style="border-collapse: collapse; width: 100%; margin: 10px 0;">
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Order Reference:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.reference"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Requested by:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.owner_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Department:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.department_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Subject:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.ticket_subject"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Description:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.ticket_description or 'No description provided'"/></td>
+                            </tr>
+                            <tr t-if="object.supplier_id">
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Supplier:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.supplier_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Approved by:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.approver_id.name"/></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="background-color: #d4edda; padding: 15px; border-radius: 5px; margin: 25px 0;">
+                        <p style="margin: 0; color: #155724;">
+                            <strong>Next Steps:</strong> Your order will now proceed to the procurement process.
+                            You will receive updates on delivery status as they become available.
+                        </p>
+                    </div>
+
+                    <p style="margin-top: 30px;">
+                        If you have any questions about this order, please contact your approver:
+                        <strong><t t-out="object.approver_id.name"/></strong>
+                        <t t-if="object.approver_id.email"> (<t t-out="object.approver_id.email"/>)</t>
+                    </p>
+
+                    <hr style="margin: 30px 0; border: none; border-top: 1px solid #dee2e6;"/>
+                    <p style="font-size: 12px; color: #6c757d; margin: 0;">
+                        This is an automated notification from the Order Management System.
+                        Please do not reply to this email.
+                    </p>
+                </div>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+
+    <record id="mail_template_order_refused" model="mail.template">
+        <field name="name">Order Refused Notification</field>
+        <field name="model_id" ref="model_ord_main"/>
+        <field name="subject"> Order {{ object.reference }} - Refused</field>
+        <field name="email_from">no-reply@autocontrole.be</field>
+        <field name="email_to">{{ object.owner_id.email }}</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <div style="background-color: #dc3545; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+                    <h1 style="margin: 0; font-size: 24px;">❌ Order Refused</h1>
+                </div>
+
+                <div style="padding: 30px; background-color: #f8f9fa; border-radius: 0 0 8px 8px;">
+                    <p style="font-size: 16px; margin-bottom: 20px;">Dear <t t-out="object.owner_id.name"/>,</p>
+
+                    <p style="font-size: 16px; margin-bottom: 25px;">
+                        We regret to inform you that your order request has been <strong style="color: #dc3545;">refused</strong>.
+                    </p>
+
+                    <div style="background-color: white; padding: 20px; border-radius: 5px; border-left: 4px solid #dc3545; margin: 25px 0;">
+                        <h3 style="color: #333; margin-top: 0;">Order Details</h3>
+                        <table style="border-collapse: collapse; width: 100%; margin: 10px 0;">
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Order Reference:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.reference"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Requested by:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.owner_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Department:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.department_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Subject:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.ticket_subject"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Description:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.ticket_description or 'No description provided'"/></td>
+                            </tr>
+                            <tr t-if="object.supplier_id">
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Supplier:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.supplier_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid #ddd; font-weight: bold;">Reviewed by:</td>
+                                <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.approver_id.name"/></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div style="background-color: #f8d7da; padding: 15px; border-radius: 5px; margin: 25px 0;">
+                        <p style="margin: 0; color: #721c24;">
+                            <strong>What's Next:</strong> You may contact your approver to understand the reasons
+                            for refusal and discuss potential alternatives or modifications to your request.
+                        </p>
+                    </div>
+
+                    <p style="margin-top: 30px;">
+                        For more information about this decision, please contact your approver:
+                        <strong><t t-out="object.approver_id.name"/></strong>
+                        <t t-if="object.approver_id.email"> (<t t-out="object.approver_id.email"/>)</t>
+                    </p>
+
+                    <hr style="margin: 30px 0; border: none; border-top: 1px solid #dee2e6;"/>
+                    <p style="font-size: 12px; color: #6c757d; margin: 0;">
+                        This is an automated notification from the Order Management System.
+                        Please do not reply to this email.
+                    </p>
+                </div>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
 </odoo>

@@ -16,7 +16,7 @@ class OrdAttachment(models.Model):
 
     order_id = fields.Many2one('ord.main', string='Order', required=True)
     full_filename = fields.Char(string='Full Filename', store=True)
-    size_mb = fields.Float(string='Size (MB)', store=True)
+    size_mb = fields.Float(string='Size (MB)', store=True, digits=(10, 2))
 
     # Override inherited
     name = fields.Char(string='Filename', required=True, default='none')

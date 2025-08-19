@@ -15,7 +15,7 @@ class OrdMain(models.Model):
         ('waiting', 'Waiting'),
         ('refused', 'Refused'),
         ('accepted', 'Accepted'),
-    ], default='waiting', string='Order status')
+    ], default='waiting', string='Order status', tracking=True)
 
     reference = fields.Char(
         string='Reference',
@@ -194,3 +194,36 @@ class OrdMain(models.Model):
 
             _logger.warning(f"Failed to generate approval URL: {e}")
             return f"https://your-odoo-server.com/web#model=ord.main&id={self.id}&view_type=form"
+
+    def write(self, vals):
+        result = super().write(vals)
+
+        if 'status' in vals and vals['status'] in ['refused', 'accepted']:
+            for record in self:
+                record._send_status_notification(vals['status'])
+
+        return result
+
+    def _send_status_notification(self, new_status):
+        self.ensure_one()
+
+        if not self.owner_id or not self.owner_id.email:
+            _logger.warning(f'No owner or owner email for order {self.reference}')
+            return
+
+        mail_servers = self.env['ir.mail_server'].search([])
+        if not mail_servers:
+            _logger.info(f'Skipping email notification for order {self.reference} - no SMTP server configured')
+            return
+
+        try:
+            template_ref = f'order.mail_template_order_{new_status}'
+            template = self.env.ref(template_ref, raise_if_not_found=False)
+
+            if template:
+                template.send_mail(self.id, force_send=True)
+                _logger.info(f'Status notification sent for order {self.reference} to {self.owner_id.email}')
+
+
+        except Exception as e:
+            _logger.error(f'Failed to send status notification for order {self.reference}: {str(e)}')
