@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 class OrdMain(models.Model):
     _name = 'ord.main'
     _description = 'Order main'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'reference'
 
     status = fields.Selection([
@@ -121,34 +122,6 @@ class OrdMain(models.Model):
 
         return records
 
-    # def _send_approval_notification(self):
-    #
-    #     _logger.info('##############################')
-    #     _logger.info(f'Starting email notification for order {self.reference}')
-    #     _logger.info(f'Approver: {self.approver_id.name} ({self.approver_id.email})')
-    #     _logger.info('##############################')
-    #
-    #     self.ensure_one()
-    #     template = self.env.ref('order.mail_template_new_order_approval', raise_if_not_found=False)
-    #
-    #
-    #     if not template:
-    #         _logger.warning(f'Email template not found for order {self.reference}')
-    #         return
-    #
-    #     if not self.approver_id.email:
-    #         _logger.warning(f'Approver {self.approver_id.name} has no email address for order {self.reference}')
-    #         return
-    #
-    #     try:
-    #
-    #         template.send_mail(self.id, force_send=True, raise_exception=True)
-    #         _logger.info(f'Approval notification sent to {self.approver_id.name} for order {self.reference}')
-    #
-    #     except Exception as e:
-    #         _logger.error(f'Failed to send approval notification for order {self.reference}: {str(e)}')
-    #         raise
-
     def _send_approval_notification(self):
         """Send approval notification email"""
         self.ensure_one()
@@ -157,27 +130,67 @@ class OrdMain(models.Model):
             _logger.warning(f'No approver or approver email for order {self.reference}')
             return
 
+        mail_servers = self.env['ir.mail_server'].search([])
+        if not mail_servers:
+            _logger.info(f'Skipping email notification for order {self.reference} - no SMTP server configured')
+            return
+
         try:
-            # Get the template
+
+            attachment_ids = []
+            if self.attachment_ids:
+                for attachment in self.attachment_ids:
+                    mail_attachment = self.env['ir.attachment'].create({
+                        'name': attachment.name,
+                        'datas': attachment.datas,
+                        'mimetype': attachment.mimetype,
+                        'res_model': 'mail.mail',
+                        'res_id': 0,
+                    })
+                    attachment_ids.append(mail_attachment.id)
+
             template = self.env.ref('order.mail_template_new_order_approval', raise_if_not_found=False)
+
+            if template:
+                template.send_mail(
+                    self.id,
+                    force_send=True,
+                    email_values={
+                        'email_to': self.approver_id.email,
+                        'attachment_ids': [(6, 0, attachment_ids)] if attachment_ids else False
+                    }
+                )
 
             if not template:
                 _logger.warning(f'Email template not found for order {self.reference}')
                 return
 
-            # Send mail using the template (this handles all rendering automatically)
-            template.send_mail(
-                self.id,
-                force_send=True,
-                raise_exception=False,  # Don't break order creation if email fails
-                email_values={
-                    'email_to': self.approver_id.email,
-                    'email_from': 'no-reply@autocontrole.be'
-                }
-            )
 
             _logger.info(f'Email sent to {self.approver_id.email} for order {self.reference}')
 
         except Exception as e:
             _logger.error(f'Email failed for order {self.reference}: {str(e)}')
-            # Don't re-raise - let order creation succeed even if email fails
+
+            self.message_post(
+                body=f"Failed to send approval email: {str(e)}",
+                message_type='notification'
+            )
+
+    def get_approval_url(self):
+
+        try:
+
+            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            if not base_url:
+
+                base_url = self.get_base_url()
+
+
+            base_url = base_url.rstrip('/')
+
+            return f"{base_url}/web#model=ord.main&id={self.id}&view_type=form"
+
+        except Exception as e:
+
+            _logger.warning(f"Failed to generate approval URL: {e}")
+            return f"https://your-odoo-server.com/web#model=ord.main&id={self.id}&view_type=form"

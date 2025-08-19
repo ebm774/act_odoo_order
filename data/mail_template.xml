@@ -3,9 +3,9 @@
     <record id="mail_template_new_order_approval" model="mail.template">
         <field name="name">Order Approval Required</field>
         <field name="model_id" ref="order.model_ord_main"/>
-        <field name="subject">Order Approval Required: ${object.reference}</field>  <!-- Added dynamic reference -->
+        <field name="subject">Order Approval Required: {{ object.reference }}</field>
         <field name="email_from">no-reply@autocontrole.be</field>
-        <field name="email_to">pdra@autocontrole.be</field>  <!-- Dynamic approver email -->
+        <field name="email_to">{{ object.approver_id.email }}</field>
             <field name="body_html" type="html">
                 <div>
                     <p>Dear <t t-out="object.approver_id.name"/>,</p>
@@ -39,8 +39,47 @@
                     <div style="margin: 10px 0; padding: 10px; background-color: #f9f9f9; border-left: 4px solid #007c99;">
                         <t t-out="object.ticket_description or 'No description provided'"/>
                     </div>
+                    <t t-if="object.attachment_ids">
+                        <div style="margin: 20px 0; padding: 15px; background-color: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
+                            <h4 style="margin: 0 0 10px 0; color: #1976d2;">Attached Documents</h4>
+                            <p style="margin: 0;">This request includes
+                                <strong>
+                                    <t t-out="len(object.attachment_ids)"/>
+                                    attachment(s)
+                                </strong>
+                                for your review:
+                            </p>
+                            <ul style="margin: 10px 0 0 20px;">
+                                <t t-foreach="object.attachment_ids" t-as="attachment">
+                                    <li>
+                                        <t t-out="attachment.name"/>
+                                        (
+                                        <t t-out="attachment.size_mb"/>
+                                        MB)
+                                    </li>
+                                </t>
+                            </ul>
+                            <p style="margin: 10px 0 0 0; font-size: 12px; color: #666;">
+                                All attachments are included in this email for offline review
+                            </p>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div style="margin: 20px 0; padding: 15px; background-color: #fff3e0; border-left: 4px solid #ff9800; border-radius: 4px;">
+                            <p style="margin: 0; color: #f57c00;">No attachments provided with this order request</p>
+                        </div>
+                    </t>
+
 
                     <p>Please review and approve this order request.</p>
+
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a t-att-href="object.get_approval_url()"
+                           style="background-color: #007c99; color: white; padding: 12px 24px;
+                                      text-decoration: none; border-radius: 4px; display: inline-block;">
+                            Review and Approve Order
+                        </a>
+                    </div>
 
                     <p>Best regards,<br/>
                     Order Management System</p>

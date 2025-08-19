@@ -29,10 +29,10 @@ class OrdAttachment(models.Model):
     @api.constrains('size_mb')
     def _check_file_size(self):
         for record in self:
-            if self.size_mb > 50:
+            if record.size_mb > 50:
                 raise UserError(
                     _('File size cannot exceed %d MB. Current size: %.2f MB')
-                    % (50, self.size_mb)
+                    % (50, record.size_mb)
                 )
 
     @api.constrains('mimetype')
