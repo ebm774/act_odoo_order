@@ -28,7 +28,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'web', 'mail'],
+    'depends': ['base', 'web', 'mail', 'base_act'],
 
     # always loaded
     # always respect the loading order
