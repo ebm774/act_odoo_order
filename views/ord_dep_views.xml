@@ -4,12 +4,12 @@
     <!-- List view -->
     <record id="view_ord_department_list" model="ir.ui.view">
         <field name="name">ord.department.list</field>
-        <field name="model">ord.department</field>
+        <field name="model">base_act.department</field>
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name="viewer_group_id" readonly="1"/>
-                <field name="user_count"/>
+<!--                <field name="viewer_group_id" readonly="1"/>-->
+<!--                <field name="user_count"/>-->
             </list>
         </field>
     </record>
@@ -17,7 +17,7 @@
     <!-- Form View -->
     <record id="view_ord_department_form" model="ir.ui.view">
         <field name="name">ord.department.form</field>
-        <field name="model">ord.department</field>
+        <field name="model">base_act.department</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -28,8 +28,8 @@
                     </div>
                     <group>
                         <group string="Department Information">
-                            <field name="viewer_group_id" readonly="1" options="{'no_open': True}"/>
-                            <field name="user_count" readonly="1"/>
+<!--                            <field name="viewer_group_id" readonly="1" options="{'no_open': True}"/>-->
+<!--                            <field name="user_count" readonly="1"/>-->
                         </group>
                     </group>
                     <notebook>
@@ -51,15 +51,15 @@
        <!-- Search View -->
     <record id="view_ord_department_search" model="ir.ui.view">
         <field name="name">ord.department.search</field>
-        <field name="model">ord.department</field>
+        <field name="model">base_act.department</field>
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="viewer_group_id"/>
+<!--                <field name="viewer_group_id"/>-->
                 <field name="user_ids"/>
 
                 <group expand="0" string="Group By">
-                    <filter name="group_by_group" string="Group Name" context="{'group_by': 'viewer_group_id'}"/>
+<!--                    <filter name="group_by_group" string="Group Name" context="{'group_by': 'viewer_group_id'}"/>-->
                 </group>
             </search>
         </field>
@@ -69,7 +69,7 @@
     <!-- Action -->
     <record id="action_ord_department" model="ir.actions.act_window">
         <field name="name">Departments</field>
-        <field name="res_model">ord.department</field>
+        <field name="res_model">base_act.department</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_ord_department_search"/>
         <field name="help" type="html">

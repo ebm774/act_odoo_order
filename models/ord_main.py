@@ -27,7 +27,7 @@ class OrdMain(models.Model):
 
     creation_date = fields.Datetime(string='Creation date', required=True, default=fields.Datetime.now)
     owner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user)
-    department_id = fields.Many2one('ord.department', string='Department', required=True)
+    department_id = fields.Many2one('base_act.department', string='Department', required=True)
     approver_id = fields.Many2one(
         'res.users',
         string='Approver',
@@ -66,9 +66,8 @@ class OrdMain(models.Model):
         string='Viewers',
         compute='_compute_viewer_ids',
         store=True,
-        help='Groups that can view this order',
-        hidden='Yes'
-    )
+        help='Groups that can view this order'
+    )#        hidden='Yes'
 
     is_delivered = fields.Boolean(string="Delivered", default=False)
     delivery_date = fields.Date(string='Delivery date')
@@ -86,13 +85,13 @@ class OrdMain(models.Model):
             order.new_ticket_subject = order.ticket_id.subject
             order.new_ticket_description = order.ticket_id.description
 
-    @api.depends('department_id', 'department_id.viewer_group_id', 'owner_id')
+    @api.depends('department_id', 'owner_id')
     def _compute_viewer_ids(self):
         for record in self:
             viewer_groups = self.env['res.groups']
 
-            if record.department_id and record.department_id.viewer_group_id:
-                viewer_groups += record.department_id.viewer_group_id
+            # if record.department_id and record.department_id.viewer_group_id:
+            #     viewer_groups += record.department_id
 
             management_groups = self.env['res.groups'].search([
                 ('name', 'in', ['Order Director', 'Order Approver'])

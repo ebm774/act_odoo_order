@@ -35,16 +35,16 @@
         
         
         <!-- Record rule: Users can see orders if they're in department group OR owner -->
-        <record id="rule_ord_main_department_access" model="ir.rule">
-            <field name="name">Orders: department + Owner Access</field>
-            <field name="model_id" ref="model_ord_main"/>
-            <field name="groups" eval="[(4, ref('group_order_user'))]"/>
-            <field name="domain_force">[
-                '|',
-                ('department_id.viewer_group_id', 'in', user.groups_id.ids),
-                ('owner_id', '=', user.id)
-            ]</field>
-        </record>
+<!--        <record id="rule_ord_main_department_access" model="ir.rule">-->
+<!--            <field name="name">Orders: department + Owner Access</field>-->
+<!--            <field name="model_id" ref="model_ord_main"/>-->
+<!--            <field name="groups" eval="[(4, ref('group_order_user'))]"/>-->
+<!--            <field name="domain_force">[-->
+<!--                '|',-->
+<!--                ('department_id.viewer_group_id', 'in', user.groups_id.ids),-->
+<!--                ('owner_id', '=', user.id)-->
+<!--            ]</field>-->
+<!--        </record>-->
 
         <!-- Record rule: Management sees everything -->
         <record id="rule_ord_main_management_access" model="ir.rule">

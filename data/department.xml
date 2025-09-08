@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="department_1" model="ord.department">
+        <record id="department_1" model="base_act.department">
             <field name="name">department 1</field>
-            <field name="viewer_group_id" ref="group_viewer_dep_1"/>
+<!--            <field name="viewer_group_id" ref="group_viewer_dep_1"/>-->
         </record>
-        <record id="department_2" model="ord.department">
+        <record id="department_2" model="base_act.department">
             <field name="name">department 2</field>
-            <field name="viewer_group_id" ref="group_viewer_dep_2"/>
+<!--            <field name="viewer_group_id" ref="group_viewer_dep_2"/>-->
         </record>
     </data>
 </odoo>
