@@ -111,13 +111,7 @@ class OrdMain(models.Model):
         # Only send notifications if we're not installing/updating modules
         if not self.env.context.get('install_mode') and not self._context.get('module_installation'):
             for record in records:
-                # Additional check: only send if SMTP is configured
-                mail_servers = self.env['ir.mail_server'].search([])
-                if mail_servers:
-                    record._send_approval_notification()
-                else:
-                    _logger.info(
-                        f'Skipping email notification for order {record.reference} - no SMTP server configured')
+                record._send_approval_notification()
 
         return records
 
@@ -129,13 +123,7 @@ class OrdMain(models.Model):
             _logger.warning(f'No approver or approver email for order {self.reference}')
             return
 
-        mail_servers = self.env['ir.mail_server'].search([])
-        if not mail_servers:
-            _logger.info(f'Skipping email notification for order {self.reference} - no SMTP server configured')
-            return
-
         try:
-
             attachment_ids = []
             if self.attachment_ids:
                 for attachment in self.attachment_ids:
@@ -210,10 +198,6 @@ class OrdMain(models.Model):
             _logger.warning(f'No owner or owner email for order {self.reference}')
             return
 
-        mail_servers = self.env['ir.mail_server'].search([])
-        if not mail_servers:
-            _logger.info(f'Skipping email notification for order {self.reference} - no SMTP server configured')
-            return
 
         try:
             template_ref = f'order.mail_template_order_{new_status}'
