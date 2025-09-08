@@ -32,8 +32,9 @@ class OrdMain(models.Model):
         'res.users',
         string='Approver',
         required=True,
-        domain=lambda self: [('groups_id', 'in', [self.env.ref('order.group_order_approver').id])],
+        domain="[('groups_id.name', '=', 'odoo_order_approver')]"
     )
+
 
 
     ticket_subject = fields.Char(
@@ -164,23 +165,17 @@ class OrdMain(models.Model):
             )
 
     def get_approval_url(self):
-
         try:
 
-            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-            if not base_url:
-
-                base_url = self.get_base_url()
-
-
-            base_url = base_url.rstrip('/')
-
+            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url', default=False)
+            if base_url.startswith('http://'):
+                base_url = base_url.replace('http://', 'https://', 1)
             return f"{base_url}/web#model=ord.main&id={self.id}&view_type=form"
 
         except Exception as e:
-
             _logger.warning(f"Failed to generate approval URL: {e}")
-            return f"https://your-odoo-server.com/web#model=ord.main&id={self.id}&view_type=form"
+            # Use your actual domain instead of placeholder
+            return f"https://act12-debiandev.autocontrole.be/web#model=ord.main&id={self.id}&view_type=form"
 
     def write(self, vals):
         result = super().write(vals)
