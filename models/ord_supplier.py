@@ -10,11 +10,16 @@ class OrdSupplier(models.Model):
     name = fields.Char(string="Name", required=True)
     street = fields.Char(string="Street", required=True)
     number = fields.Char(string="Number", required=True)
+    postal_code = fields.Char(string="Postal Code", required=True)
     city = fields.Char(string="City", required=True)
     phone = fields.Char(string="Phone", required=True)
+    fax = fields.Char(string="Fax")
     mail = fields.Char(string="Email", required=True)
-    contact_name = fields.Char(string="Contact name", required=True)
+    contact_name = fields.Char(string="Contact name")
+    customer_number = fields.Char(string="Customer number")
     status_id = fields.One2many('ord.supplier.status', 'supplier_id', string='Status')
+
+
     order_ids = fields.One2many('ord.main', 'supplier_id', string='Orders')
     order_count = fields.Integer(string='Order Count', compute='_compute_order_count', store=True)
     status_log_ids = fields.One2many('ord.supplier.status.log', 'supplier_id', string='Status logs')

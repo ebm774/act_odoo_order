@@ -6,6 +6,7 @@
             <field name="street">Main Street</field>
             <field name="number">123</field>
             <field name="city">Brussels</field>
+            <field name="postal_code">1200</field>
             <field name="phone">+32 2 123 45 67</field>
             <field name="mail">contact@officesupplies.be</field>
             <field name="contact_name">Jean Dupont</field>
