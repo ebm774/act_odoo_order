@@ -51,7 +51,7 @@ class OrdMain(models.Model):
         'ord.supplier',
         string='Supplier',
         required=True,
-        domain="[('status_id.status', '=', 'approved')]"
+        domain="[('status_id.status', 'in', ['approved', 'new'])]"
     )
 
 
@@ -205,3 +205,12 @@ class OrdMain(models.Model):
 
         except Exception as e:
             _logger.error(f'Failed to send status notification for order {self.reference}: {str(e)}')
+
+    def _get_can_edit_status(self):
+        """Check if current user can edit status - called from view"""
+        current_user = self.env.user
+        is_approver = any(
+            group.name == 'odoo_order_approver'
+            for group in current_user.groups_id
+        )
+        return bool(self.id) and is_approver and self.owner_id != current_user

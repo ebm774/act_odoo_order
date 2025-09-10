@@ -3,7 +3,7 @@
     <!-- Wizard Form View -->
     <record id="view_supplier_status_wizard_form" model="ir.ui.view">
         <field name="name">supplier.status.wizard.form</field>
-        <field name="model">supplier.status.wizard</field>
+        <field name="model">ord.supplier.status.wizard</field>
         <field name="arch" type="xml">
             <form>
                 <group>
@@ -45,7 +45,7 @@
 
     <record id="action_supplier_status_wizard" model="ir.actions.act_window">
         <field name="name">Edit Supplier Status</field>
-        <field name="res_model">supplier.status.wizard</field>
+        <field name="res_model">ord.supplier.status.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
         <field name="binding_model_id" ref="model_ord_supplier"/>

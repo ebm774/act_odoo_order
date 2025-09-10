@@ -97,7 +97,12 @@
                             <group>
                                 <field name="ticket_subject" string="Subject"/>
                                 <field name="ticket_description" string="Description"/>
-                                <field name="status" string="Status" readonly="not id"/>
+                                    <field name="status" string="Status"
+                                           readonly="not id or not context.get('can_edit_status', False)"
+                                           widget="badge"
+                                           decoration-warning="status == 'waiting'"
+                                           decoration-success="status == 'accepted'"
+                                           decoration-danger="status == 'refused'"/>
                             </group>
                         </page>
 
@@ -123,7 +128,6 @@
                                         </group>
                                         <group>
                                             <field name="size_mb" readonly="1"/>
-                                            <field name="create_date" readonly="1"/>
                                         </group>
                                     </group>
                                     <group string="File">
@@ -137,7 +141,8 @@
                         </page>
                         <page string="Delivery">
                             <group>
-                                <field name="is_delivered" string="Mark as Delivered" readonly="not id"/>
+                                <field name="is_delivered" string="Mark as Delivered"
+                                       readonly="status != 'accepted'"/>
                                 <field name="delivery_date" string="Delivery Date" readonly="1"
                                        invisible="not is_delivered"/>
                             </group>

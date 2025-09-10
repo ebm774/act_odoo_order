@@ -7,14 +7,15 @@ class OrdSupplier(models.Model):
     _description = 'Order supplier'
     _rec_name = 'name'
 
+    legacy_id = fields.Integer(string="Legacy ID")
     name = fields.Char(string="Name", required=True)
-    street = fields.Char(string="Street", required=True)
-    number = fields.Char(string="Number", required=True)
-    postal_code = fields.Char(string="Postal Code", required=True)
-    city = fields.Char(string="City", required=True)
-    phone = fields.Char(string="Phone", required=True)
+    street = fields.Char(string="Street")
+    number = fields.Char(string="Number")
+    postal_code = fields.Char(string="Postal Code")
+    city = fields.Char(string="City")
+    phone = fields.Char(string="Phone")
     fax = fields.Char(string="Fax")
-    mail = fields.Char(string="Email", required=True)
+    mail = fields.Char(string="Email")
     contact_name = fields.Char(string="Contact name")
     customer_number = fields.Char(string="Customer number")
     status_id = fields.One2many('ord.supplier.status', 'supplier_id', string='Status')
@@ -31,14 +32,14 @@ class OrdSupplier(models.Model):
         readonly=True,
     )
 
-    @api.constrains('mail')
-    def _check_email_format(self):
-        for record in self:
-            if record.mail:
-                import re
-                email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-                if not re.match(email_pattern, record.mail):
-                    raise UserError(_('Please enter a valid email address'))
+    # @api.constrains('mail')
+    # def _check_email_format(self):
+    #     for record in self:
+    #         if record.mail:
+    #             import re
+    #             email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    #             if not re.match(email_pattern, record.mail):
+    #                 raise UserError(_('Please enter a valid email address'))
 
     @api.depends('order_ids')
     def _compute_order_count(self):
@@ -66,7 +67,7 @@ class OrdSupplier(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'Edit Supplier Status',
-            'res_model': 'supplier.status.wizard',
+            'res_model': 'ord.supplier.status.wizard',
             'view_mode': 'form',
             'target': 'new',
             'context': {

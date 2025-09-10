@@ -5,7 +5,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class SupplierStatusWizard(models.TransientModel):
-    _name = 'supplier.status.wizard'
+    _name = 'ord.supplier.status.wizard'
     _description = 'Edit Supplier Status Wizard'
 
     supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True, readonly=True)
