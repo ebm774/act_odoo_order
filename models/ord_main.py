@@ -206,11 +206,24 @@ class OrdMain(models.Model):
         except Exception as e:
             _logger.error(f'Failed to send status notification for order {self.reference}: {str(e)}')
 
-    def _get_can_edit_status(self):
-        """Check if current user can edit status - called from view"""
+    ui_readonly_state = fields.Selection([
+        ('editable', 'Editable'),
+        ('readonly', 'Readonly')
+    ], compute='_compute_ui_readonly_state')
+
+
+    def _compute_ui_readonly_state(self):
+        """Compute if current user can edit the status field"""
         current_user = self.env.user
-        is_approver = any(
-            group.name == 'odoo_order_approver'
-            for group in current_user.groups_id
-        )
-        return bool(self.id) and is_approver and self.owner_id != current_user
+        all_groups = [group.name for group in current_user.groups_id]
+        is_approver_ldap = any(group.name == 'odoo_order_approver' for group in current_user.groups_id)
+
+        for record in self:
+            is_owner = (record.owner_id == current_user)
+            has_id = bool(record.id)
+            result = has_id and is_approver_ldap and not is_owner
+
+            if result:
+                self.ui_readonly_state = 'editable'
+            else:
+                self.ui_readonly_state = 'readonly'
