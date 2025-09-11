@@ -142,13 +142,6 @@
                         </table>
                     </div>
 
-                    <div style="background-color: #d4edda; padding: 15px; border-radius: 5px; margin: 25px 0;">
-                        <p style="margin: 0; color: #155724;">
-                            <strong>Next Steps:</strong> Your order will now proceed to the procurement process.
-                            You will receive updates on delivery status as they become available.
-                        </p>
-                    </div>
-
                     <p style="margin-top: 30px;">
                         If you have any questions about this order, please contact your approver:
                         <strong><t t-out="object.approver_id.name"/></strong>
@@ -218,13 +211,6 @@
                                 <td style="padding: 5px; border: 1px solid #ddd;"><t t-out="object.approver_id.name"/></td>
                             </tr>
                         </table>
-                    </div>
-
-                    <div style="background-color: #f8d7da; padding: 15px; border-radius: 5px; margin: 25px 0;">
-                        <p style="margin: 0; color: #721c24;">
-                            <strong>What's Next:</strong> You may contact your approver to understand the reasons
-                            for refusal and discuss potential alternatives or modifications to your request.
-                        </p>
                     </div>
 
                     <p style="margin-top: 30px;">
