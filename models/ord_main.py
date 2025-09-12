@@ -199,7 +199,6 @@ class OrdMain(models.Model):
             _logger.warning(f'No owner or owner email for order {self.reference}')
             return
 
-
         try:
             template_ref = f'order.mail_template_order_{new_status}'
             template = self.env.ref(template_ref, raise_if_not_found=False)
@@ -207,7 +206,6 @@ class OrdMain(models.Model):
             if template:
                 template.send_mail(self.id, force_send=True)
                 _logger.info(f'Status notification sent for order {self.reference} to {self.owner_id.email}')
-
 
         except Exception as e:
             _logger.error(f'Failed to send status notification for order {self.reference}: {str(e)}')

@@ -102,7 +102,7 @@
 
 
                                 <field name="status" string="Status"
-                                       readonly="ui_readonly_state != 'Editable'"
+                                       readonly="ui_readonly_state != 'editable'"
                                 />
                             </group>
                         </page>
