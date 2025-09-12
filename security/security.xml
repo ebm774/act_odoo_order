@@ -32,38 +32,47 @@
             <field name="category_id" ref="base.module_category_administration"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
-        
-        
-        <!-- Record rule: Users can see orders if they're in department group OR owner -->
-<!--        <record id="rule_ord_main_department_access" model="ir.rule">-->
-<!--            <field name="name">Orders: department + Owner Access</field>-->
-<!--            <field name="model_id" ref="model_ord_main"/>-->
-<!--            <field name="groups" eval="[(4, ref('group_order_user'))]"/>-->
-<!--            <field name="domain_force">[-->
-<!--                '|',-->
-<!--                ('department_id.viewer_group_id', 'in', user.groups_id.ids),-->
-<!--                ('owner_id', '=', user.id)-->
-<!--            ]</field>-->
-<!--        </record>-->
 
-        <!-- Record rule: Management sees everything -->
-        <record id="rule_ord_main_management_access" model="ir.rule">
-            <field name="name">Orders: Management Full Access</field>
-            <field name="model_id" ref="model_ord_main"/>
-            <field name="groups" eval="[(4, ref('group_order_dir')), (4, ref('group_order_approver'))]"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-        </record>
+        <!--
+        This rule handles department-based visibility:
+        - Direction users see all orders
+        - Other users see orders from their department
+        - Users always see orders they created
+        -->
 
-        <!-- Record rule: Approvers can see orders they need to approve -->
-        <record id="rule_ord_main_approver_access" model="ir.rule">
-            <field name="name">Orders: Approver Access</field>
+        <record id="rule_ord_main_ldap_user_access" model="ir.rule">
+            <field name="name">Orders: LDAP User Access</field>
             <field name="model_id" ref="model_ord_main"/>
-            <field name="groups" eval="[(4, ref('group_order_approver'))]"/>
             <field name="domain_force">[
                 '|',
-                ('approver_id', '=', user.id),
-                (1, '=', 1)  # Approvers see all (management role)
+                ('department_id', '=', user.department_id.id),
+                ('owner_id', '=', user.id)
             ]</field>
+            <field name="active" eval="True"/>
         </record>
+
+        <!-- Rule for LDAP order approvers (ID: 27): extended access -->
+        <record id="rule_ord_main_ldap_approver_access" model="ir.rule">
+            <field name="name">Orders: LDAP Approver Access</field>
+            <field name="model_id" ref="model_ord_main"/>
+            <field name="domain_force">[
+                '|', '|',
+                ('department_id', '=', user.department_id.id),
+                ('owner_id', '=', user.id),
+                ('approver_id', '=', user.id)
+            ]</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!-- Rule for manually created direction group: full access -->
+        <record id="rule_ord_main_direction_full_access" model="ir.rule">
+            <field name="name">Orders: Direction Full Access</field>
+            <field name="model_id" ref="model_ord_main"/>
+            <field name="groups" eval="[(4, ref('group_order_dir'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="active" eval="True"/>
+        </record>
+
+
     </data>
 </odoo>

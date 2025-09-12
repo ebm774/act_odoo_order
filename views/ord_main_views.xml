@@ -46,6 +46,8 @@
                         domain="[('type', '=', 'material')]"/>
                 <filter name="service" string="Service Orders"
                         domain="[('type', '=', 'service')]"/>
+                  <filter name="my_department" string="My Department"
+                    domain="[('department_id', '=', context.get('default_department_id', False))]"/>
 
                 <separator/>
                 <filter name="today" string="Today"
@@ -100,7 +102,7 @@
 
 
                                 <field name="status" string="Status"
-                                       readonly="ui_readonly_state == 'readonly'"
+                                       readonly="ui_readonly_state != 'Editable'"
                                 />
                             </group>
                         </page>

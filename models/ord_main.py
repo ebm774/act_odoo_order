@@ -1,7 +1,11 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.osv import expression
 
 import logging
+
+
+
 _logger = logging.getLogger(__name__)
 
 
@@ -27,15 +31,17 @@ class OrdMain(models.Model):
 
     creation_date = fields.Datetime(string='Creation date', required=True, default=fields.Datetime.now)
     owner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user)
-    department_id = fields.Many2one('base_act.department', string='Department', required=True)
+    department_id = fields.Many2one('base_act.department',
+                                    string='Department',
+                                    required=True,
+                                    tracking=True,
+                                    default=lambda self: self._get_default_department())
     approver_id = fields.Many2one(
         'res.users',
         string='Approver',
         required=True,
         domain="[('groups_id.name', '=', 'odoo_order_approver')]"
     )
-
-
 
     ticket_subject = fields.Char(
         string='Request Subject',
@@ -68,7 +74,7 @@ class OrdMain(models.Model):
         compute='_compute_viewer_ids',
         store=True,
         help='Groups that can view this order'
-    )#        hidden='Yes'
+    )
 
     is_delivered = fields.Boolean(string="Delivered", default=False)
     delivery_date = fields.Date(string='Delivery date')
@@ -221,9 +227,19 @@ class OrdMain(models.Model):
         for record in self:
             is_owner = (record.owner_id == current_user)
             has_id = bool(record.id)
+
             result = has_id and is_approver_ldap and not is_owner
 
             if result:
                 self.ui_readonly_state = 'editable'
             else:
                 self.ui_readonly_state = 'readonly'
+
+    @api.model
+    def _get_default_department(self):
+        """Set default to user's department, but allow selection of others"""
+        if self.env.user.department_id:
+            return self.env.user.department_id.id
+        # If user has no department, return the first available department
+        first_dept = self.env['base_act.department'].search([], limit=1)
+        return first_dept.id if first_dept else False
