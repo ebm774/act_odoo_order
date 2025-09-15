@@ -40,20 +40,6 @@ class OrdSupplier(models.Model):
     )
 
 
-    @api.depends('leg_price', 'leg_delivery', 'leg_customerService')
-    def _compute_legacy_fields(self):
-
-        _logger.info("Legacy fields computed")
-
-        for record in self:
-            if record.status_id:
-                if record.leg_price == 1:
-                    record.status_id.price = True
-                if record.leg_delivery == 1:
-                    record.status_id.delivery = True
-                if record.leg_customerService == 1:
-                    record.status_id.after_sale = True
-
     @api.depends('order_ids')
     def _compute_order_count(self):
         for record in self:
@@ -63,11 +49,29 @@ class OrdSupplier(models.Model):
         suppliers = super().create(vals_list)
 
         for supplier in suppliers:
-
-            self.env['ord.supplier.status'].create({
+            status_vals = {
                 'supplier_id': supplier.id,
+            }
 
-            })
+            if supplier.leg_price == 1:
+                status_vals['price'] = True
+                status_vals['status'] = 'partially-approved'
+            if supplier.leg_delivery == 1:
+                status_vals['delivery'] = True
+                status_vals['status'] = 'partially-approved'
+            if supplier.leg_customerService == 1:
+                status_vals['after_sale'] = True
+                status_vals['status'] = 'partially-approved'
+            if supplier.leg_price == 1 and supplier.leg_delivery == 1 and supplier.leg_customerService == 1:
+                status_vals['bill'] = True
+                status_vals['status'] = 'approved'
+            if supplier.leg_price == 0 and supplier.leg_delivery == 0 and supplier.leg_customerService == 0:
+                status_vals['bill'] = False
+                status_vals['status'] = 'non-approved'
+
+
+            self.env['ord.supplier.status'].create(status_vals)
+
 
         return suppliers
 
@@ -88,3 +92,4 @@ class OrdSupplier(models.Model):
                 'default_status_id': self.status_id.id,
             }
         }
+

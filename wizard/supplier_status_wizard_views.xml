@@ -11,8 +11,9 @@
                         <field name="supplier_id" readonly="1"/>
                         <field name="status" readonly="1" widget="badge"
                                decoration-success="status == 'approved'"
-                               decoration-warning="status == 'new'"
-                               decoration-danger="status == 'non-approved'"/>
+                               decoration-info="status == 'new'"
+                               decoration-danger="status == 'non-approved'"
+                               decoration-warning="status == 'partially-approved'"/>
                     </group>
                 </group>
 

@@ -13,13 +13,14 @@ class OrdSupplierStatus(models.Model):
     status = fields.Selection([
         ('new', 'New'),
         ('approved', 'Approved'),
+        ('partially-approved', 'Partially-Approved'),
         ('non-approved', 'Non-Approved'),
     ],string = 'Supplier status', required=True, default='new', store=True)
 
     price = fields.Boolean(string='Price', default=False)
     delivery = fields.Boolean(string='Delivery', default=False)
     after_sale = fields.Boolean(string='After sale', default=False)
-    bill = fields.Boolean(string='Bill', default=False)
+    bill = fields.Boolean(string='Bill', default=True)
 
     supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True, ondelete='cascade')
 
@@ -35,7 +36,6 @@ class OrdSupplierStatus(models.Model):
 
     @api.onchange('price', 'delivery', 'after_sale','bill')
     def _compute_status(self):
-
         for record in self:
 
             if any([record.price, record.delivery, record.after_sale, record.bill]):
@@ -52,8 +52,10 @@ class OrdSupplierStatus(models.Model):
 
             if record.price and record.delivery and record.after_sale and record.bill:
                 record.status = 'approved'
-            else:
+            elif record.price == False and record.delivery == False and record.after_sale == False and record.bill == False:
                 record.status = 'non-approved'
+            else:
+                record.status = 'partially-approved'
 
     def write(self, vals):
 

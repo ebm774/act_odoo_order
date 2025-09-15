@@ -14,6 +14,7 @@ class SupplierStatusWizard(models.TransientModel):
     status = fields.Selection([
         ('new', 'New'),
         ('approved', 'Approved'),
+        ('partially-approved', 'Partially-Approved'),
         ('non-approved', 'Non-Approved'),
     ],
         string='Status',
@@ -36,8 +37,10 @@ class SupplierStatusWizard(models.TransientModel):
 
             if record.price and record.delivery and record.after_sale and record.bill:
                 record.status = 'approved'
-            else:
+            elif record.price == False and record.delivery == False and record.after_sale == False and record.bill == False:
                 record.status = 'non-approved'
+            else:
+                record.status = 'partially-approved'
 
     @api.model
     def default_get(self, fields_list):
