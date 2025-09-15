@@ -53,21 +53,22 @@ class OrdSupplier(models.Model):
                 'supplier_id': supplier.id,
             }
 
-            if supplier.leg_price == 1:
-                status_vals['price'] = True
-                status_vals['status'] = 'partially-approved'
-            if supplier.leg_delivery == 1:
-                status_vals['delivery'] = True
-                status_vals['status'] = 'partially-approved'
-            if supplier.leg_customerService == 1:
-                status_vals['after_sale'] = True
-                status_vals['status'] = 'partially-approved'
-            if supplier.leg_price == 1 and supplier.leg_delivery == 1 and supplier.leg_customerService == 1:
-                status_vals['bill'] = True
-                status_vals['status'] = 'approved'
-            if supplier.leg_price == 0 and supplier.leg_delivery == 0 and supplier.leg_customerService == 0:
-                status_vals['bill'] = False
-                status_vals['status'] = 'non-approved'
+            if supplier.legacy_id:
+                if supplier.leg_price == 1:
+                    status_vals['price'] = True
+                    status_vals['status'] = 'partially-approved'
+                if supplier.leg_delivery == 1:
+                    status_vals['delivery'] = True
+                    status_vals['status'] = 'partially-approved'
+                if supplier.leg_customerService == 1:
+                    status_vals['after_sale'] = True
+                    status_vals['status'] = 'partially-approved'
+                if supplier.leg_price == 1 and supplier.leg_delivery == 1 and supplier.leg_customerService == 1:
+                    status_vals['bill'] = True
+                    status_vals['status'] = 'approved'
+                if supplier.leg_price == 0 and supplier.leg_delivery == 0 and supplier.leg_customerService == 0:
+                    status_vals['bill'] = False
+                    status_vals['status'] = 'non-approved'
 
 
             self.env['ord.supplier.status'].create(status_vals)

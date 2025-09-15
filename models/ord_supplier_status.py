@@ -20,7 +20,7 @@ class OrdSupplierStatus(models.Model):
     price = fields.Boolean(string='Price', default=False)
     delivery = fields.Boolean(string='Delivery', default=False)
     after_sale = fields.Boolean(string='After sale', default=False)
-    bill = fields.Boolean(string='Bill', default=True)
+    bill = fields.Boolean(string='Bill', default=False)
 
     supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True, ondelete='cascade')
 
@@ -37,7 +37,6 @@ class OrdSupplierStatus(models.Model):
     @api.onchange('price', 'delivery', 'after_sale','bill')
     def _compute_status(self):
         for record in self:
-
             if any([record.price, record.delivery, record.after_sale, record.bill]):
                 if not record.status_reason :
                     return {
@@ -59,12 +58,13 @@ class OrdSupplierStatus(models.Model):
 
     def write(self, vals):
 
+
         for record in self:
             validation_fields = ['price','delivery','after_sale','bill']
             changed_fields = []
 
             for field in validation_fields:
-                if field in vals and vals[field] != getattr(record, field): #Only proceeds if the field is being updated AND the value is actually different
+                if field in vals and vals[field] != getattr(record, field):
                     field_label = record._fields[field].string
                     old_value = getattr(record, field)
                     new_value = vals[field]
