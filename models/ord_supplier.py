@@ -36,6 +36,7 @@ class OrdSupplier(models.Model):
     current_status = fields.Selection(
         related='status_id.status',
         string='Current Status',
+        store=True,
         readonly=True,
     )
 
