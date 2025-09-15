@@ -236,8 +236,7 @@ class OrdMain(models.Model):
     @api.model
     def _get_default_department(self):
         """Set default to user's department, but allow selection of others"""
-        if self.env.user.department_id:
-            return self.env.user.department_id.id
-        # If user has no department, return the first available department
-        first_dept = self.env['base_act.department'].search([], limit=1)
-        return first_dept.id if first_dept else False
+        user_departments = self.env.user.department_ids
+        if user_departments:
+            return user_departments[0].id
+        return False
