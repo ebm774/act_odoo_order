@@ -219,14 +219,12 @@ class OrdMain(models.Model):
     def _compute_ui_readonly_state(self):
         """Compute if current user can edit the status field"""
         current_user = self.env.user
-        all_groups = [group.name for group in current_user.groups_id]
         is_approver_ldap = any(group.name == 'odoo_order_approver' for group in current_user.groups_id)
 
         for record in self:
-            is_owner = (record.owner_id == current_user)
             has_id = bool(record.id)
 
-            result = has_id and is_approver_ldap and not is_owner
+            result = has_id and is_approver_ldap
 
             if result:
                 self.ui_readonly_state = 'editable'
