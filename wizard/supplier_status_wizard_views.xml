@@ -18,7 +18,8 @@
                            required="1"/>
                     <field name="status"
                            widget="selection"
-                           options="{'no_open': True, 'no_create': True}"/>
+                           options="{'no_open': True, 'no_create': True}"
+                            readonly="status_reason == False"/>
 
                 </group>
 
