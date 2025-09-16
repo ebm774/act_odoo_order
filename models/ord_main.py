@@ -189,6 +189,14 @@ class OrdMain(models.Model):
             return f"https://act12-debiandev.autocontrole.be/web#model=ord.main&id={self.id}&view_type=form"
 
     def write(self, vals):
+
+
+        if 'is_delivered' in vals:
+            if vals['is_delivered']:
+                vals['delivery_date'] = fields.Date.today()
+            else:
+                vals['delivery_date'] = False
+
         result = super().write(vals)
 
         if 'status' in vals and vals['status'] in ['refused', 'accepted']:
