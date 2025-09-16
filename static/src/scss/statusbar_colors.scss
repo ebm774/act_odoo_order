@@ -1,0 +1,34 @@
+/* Odoo 18 Statusbar colors - Only CURRENT status colored */
+
+/* Current Waiting status - Orange */
+.o_form_view .o_form_statusbar .o_statusbar_status .o_arrow_button_current[data-value="waiting"] {
+    background-color: #f0ad4e !important;
+    border-color: #f0ad4e !important;
+    color: #fff !important;
+}
+
+.o_form_view .o_form_statusbar .o_statusbar_status .o_arrow_button_current[data-value="waiting"]::after {
+    border-left-color: #f0ad4e !important;
+}
+
+/* Current Refused status - Red */
+.o_form_view .o_form_statusbar .o_statusbar_status .o_arrow_button_current[data-value="refused"] {
+    background-color: #d9534f !important;
+    border-color: #d9534f !important;
+    color: #fff !important;
+}
+
+.o_form_view .o_form_statusbar .o_statusbar_status .o_arrow_button_current[data-value="refused"]::after {
+    border-left-color: #d9534f !important;
+}
+
+/* Current Accepted status - Green */
+.o_form_view .o_form_statusbar .o_statusbar_status .o_arrow_button_current[data-value="accepted"] {
+    background-color: #5cb85c !important;
+    border-color: #5cb85c !important;
+    color: #fff !important;
+}
+
+.o_form_view .o_form_statusbar .o_statusbar_status .o_arrow_button_current[data-value="accepted"]::after {
+    border-left-color: #5cb85c !important;
+}

@@ -73,11 +73,15 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <div class="oe_title">
+                    <header>
                         <h1>
                             <field name="reference" placeholder="Order Reference"/>
                         </h1>
-                    </div>
+                        <field name="status"
+                               widget="statusbar"
+                                options="{'statusbar_colors': {'waiting': 'orange', 'refused': 'red', 'accepted': 'green'}}"
+                        />
+                    </header>
                     <group>
                         <group string="Order Information">
                             <field name="creation_date" readonly="1"/>

@@ -30,6 +30,12 @@
     # any module necessary for this one to work correctly
     'depends': ['mail', 'base_act'],
 
+    'assets': {
+        'web.assets_backend': [
+            'order/static/src/scss/statusbar_colors.scss',
+        ],
+    },
+
     # always loaded
     # always respect the loading order
     'data': [
