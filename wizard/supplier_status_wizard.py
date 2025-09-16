@@ -30,11 +30,6 @@ class SupplierStatusWizard(models.TransientModel):
     status_reason = fields.Text(string='Reason for Change', required=True)
 
 
-    @api.onchange('manual_status_override')
-    def _onchange_manual_override(self):
-        """Reset status to original when override is disabled"""
-        if not self.manual_status_override and self.status_id:
-            self.status = self.status_id.status
 
     @api.model
     def default_get(self, fields_list):
@@ -68,7 +63,6 @@ class SupplierStatusWizard(models.TransientModel):
             'after_sale': self.after_sale,
             'bill': self.bill,
             'status': self.status,
-            'manual_override': self.manual_status_override,
         })
 
         return {'type': 'ir.actions.act_window_close'}

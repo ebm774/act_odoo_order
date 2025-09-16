@@ -6,27 +6,16 @@
         web_icon="order,static/description/icon.png"
         sequence="60"/>
 
-
     <menuitem id="menu_order_main"
         name="Order Requests"
         parent="menu_order_root"
         action="action_ord_main_list"
         sequence="10"/>
 
-    <menuitem id="menu_order_mgmt"
-              name ="Management"
-              parent="menu_order_root"
-              sequence="20"/>
-    
-        <menuitem id="menu_mgmt_departments"
-            name="Departments"
-            parent="menu_order_mgmt"
-            action="action_ord_department"
-            sequence="30"/>
 
-        <menuitem id="menu_mgmt_suppliers"
+    <menuitem id="menu_mgmt_suppliers"
         name="Suppliers"
-        parent="menu_order_mgmt"
+        parent="menu_order_root"
         action="action_ord_supplier"
         sequence="30"/>
 
@@ -40,18 +29,5 @@
                   parent="menu_order_legacy"
                   action="action_ord_main_leg"
                   />
-
-
-<!--        <menuitem id="menu_supplier"-->
-<!--        name="Suppliers"-->
-<!--        parent="menu_order_root"-->
-<!--        action="action_supplier_list"-->
-<!--        sequence="10"/>-->
-
-<!--        <menuitem id="menu_order_to_approve"-->
-<!--        name="Order to approve"-->
-<!--        parent="menu_order_root"-->
-<!--        action="action_order_to_approve_list"-->
-<!--        sequence="10"/>-->
 
 </odoo>

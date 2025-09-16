@@ -55,7 +55,8 @@
                                 type="object"
                                 string="Edit Status"
                                 class="btn-primary"
-                                icon="fa-edit"/>
+                                icon="fa-edit"
+                                invisible="not can_edit_supplier_status"/>
                     </group>
                     <notebook invisible="not id">
                        <page string="Change History">
@@ -65,7 +66,6 @@
                                    <field name="user_id"/>
                                    <field name="changes"/>
                                    <field name="reason"/>
-                                   <field name="manual_override"/>
                                </list>
                            </field>
                         </page>

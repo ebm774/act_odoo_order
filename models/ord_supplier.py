@@ -41,6 +41,7 @@ class OrdSupplier(models.Model):
     )
 
 
+
     @api.depends('order_ids')
     def _compute_order_count(self):
         for record in self:
@@ -94,4 +95,33 @@ class OrdSupplier(models.Model):
                 'default_status_id': self.status_id.id,
             }
         }
+
+    can_edit_supplier_status = fields.Boolean(
+        string='Can Edit Status',
+        compute='_compute_can_edit_supplier_status'
+    )
+
+    @api.depends_context('uid')
+    def _compute_can_edit_supplier_status(self):
+        """Check if current user can edit supplier status"""
+        for record in self:
+            user = self.env.user
+
+            is_direction = False
+            if user.department_ids:
+                direction_dept = user.department_ids.filtered(lambda d: d.name == 'direction')
+                is_direction = bool(direction_dept)
+
+            is_prevention = False
+            prevention_group = self.env['res.groups'].search([
+                ('name', '=', 'odoo_order_prevention')
+            ], limit=1)
+            if prevention_group and prevention_group in user.groups_id:
+                is_prevention = True
+
+            record.can_edit_supplier_status = is_direction or is_prevention
+
+
+
+
 
