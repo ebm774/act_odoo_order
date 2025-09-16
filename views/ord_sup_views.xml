@@ -65,6 +65,7 @@
                                    <field name="user_id"/>
                                    <field name="changes"/>
                                    <field name="reason"/>
+                                   <field name="manual_override"/>
                                </list>
                            </field>
                         </page>

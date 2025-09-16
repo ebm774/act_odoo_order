@@ -21,6 +21,7 @@ class OrdSupplierStatus(models.Model):
     delivery = fields.Boolean(string='Delivery', default=False)
     after_sale = fields.Boolean(string='After sale', default=False)
     bill = fields.Boolean(string='Bill', default=False)
+    manual_override = fields.Boolean(string='Manual Override', default=False)
 
     supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True, ondelete='cascade')
 

@@ -16,15 +16,7 @@
                     <field name="status_reason"
                            placeholder="Why are you making this change?"
                            required="1"/>
-                    <field name="manual_status" invisible="1"/>
-                    <div class="alert alert-info" role="alert"
-                         invisible="manual_status_override == False">
-                        <strong>Manual Override Active:</strong>
-                        Status has been manually set and won't be automatically updated based on criteria.
-                    </div>
-                     <field name="manual_status_override" readonly="status_reason == False"/>
                     <field name="status"
-                           readonly="manual_status_override == False"
                            widget="selection"
                            options="{'no_open': True, 'no_create': True}"/>
 

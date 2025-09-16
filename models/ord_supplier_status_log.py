@@ -13,3 +13,4 @@ class OrdSupplierStatusLog(models.Model):
     changes = fields.Char(string='Changes Made', required=True)
     reason = fields.Text(string='Reason', required=True)
     supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True)
+    manual_override = fields.Boolean(string='Manual Override', default=False)
