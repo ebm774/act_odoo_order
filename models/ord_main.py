@@ -12,7 +12,9 @@ _logger = logging.getLogger(__name__)
 class OrdMain(models.Model):
     _name = 'ord.main'
     _description = 'Order main'
-    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _inherit = ['mail.thread',
+                'mail.activity.mixin',
+                'base_act.company']
     _rec_name = 'reference'
 
     status = fields.Selection([
@@ -28,6 +30,9 @@ class OrdMain(models.Model):
         default='TBD',
         copy=False,
         )
+
+    price = fields.Monetary('Unit Price', currency_field='currency_id')
+    price_comment = fields.Char(string='Price comment')
 
     creation_date = fields.Datetime(string='Creation date', required=True, default=fields.Datetime.now)
     owner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user)

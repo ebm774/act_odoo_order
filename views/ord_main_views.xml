@@ -110,6 +110,12 @@
                                 />
                             </group>
                         </page>
+                        <page string="Bills" invisible="status != 'accepted'">
+                            <group>
+                                <field name="price" string="Price (€)"/>
+                                <field name="price_comment" string="Comment"/>
+                            </group>
+                        </page>
 
                         <page string="Attachments">
                             <field name="attachment_ids" context="{'default_order_id': id}">
