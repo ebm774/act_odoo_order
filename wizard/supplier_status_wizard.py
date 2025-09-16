@@ -11,6 +11,7 @@ class SupplierStatusWizard(models.TransientModel):
     supplier_id = fields.Many2one('ord.supplier', string='Supplier', required=True, readonly=True)
     status_id = fields.Many2one('ord.supplier.status', string='Status Record', required=True, readonly=True)
 
+    manual_status_override = fields.Boolean(string='Manual Override', default=False)
     status = fields.Selection([
         ('new', 'New'),
         ('approved', 'Approved'),
@@ -19,8 +20,15 @@ class SupplierStatusWizard(models.TransientModel):
     ],
         string='Status',
         compute='_compute_status',
+        store=False,
     )
 
+    manual_status = fields.Selection([
+        ('new', 'New'),
+        ('approved', 'Approved'),
+        ('partially-approved', 'Partially-Approved'),
+        ('non-approved', 'Non-Approved'),
+    ], string='Manual Status', store=True)
 
     price = fields.Boolean(string='Price')
     delivery = fields.Boolean(string='Delivery')
@@ -29,18 +37,35 @@ class SupplierStatusWizard(models.TransientModel):
 
     status_reason = fields.Text(string='Reason for Change', required=True)
 
-
-    @api.depends('price', 'delivery', 'after_sale','bill')
+    @api.depends('price', 'delivery', 'after_sale','bill','manual_status_override', 'manual_status')
     def _compute_status(self):
 
         for record in self:
-
+            if record.manual_status_override:
+                if record.manual_status:
+                    record.status = record.manual_status
+                else:
+                    record.status = record.status_id.status if record.status_id else 'new'
+                continue
             if record.price and record.delivery and record.after_sale and record.bill:
                 record.status = 'approved'
             elif record.price == False and record.delivery == False and record.after_sale == False and record.bill == False:
                 record.status = 'non-approved'
             else:
                 record.status = 'partially-approved'
+
+    @api.onchange('status')
+    def _onchange_status_store_manual(self):
+        """Store manually selected status"""
+        if self.manual_status_override:
+            self.manual_status = self.status
+
+    @api.onchange('manual_status_override')
+    def _onchange_manual_override(self):
+        """Clear manual status when override is disabled"""
+        if not self.manual_status_override:
+            self.manual_status = False
+
 
     @api.model
     def default_get(self, fields_list):
