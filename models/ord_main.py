@@ -4,6 +4,8 @@ from odoo.osv import expression
 
 import logging
 
+import threading
+import time
 
 
 _logger = logging.getLogger(__name__)
@@ -115,17 +117,44 @@ class OrdMain(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('reference', '/') == '/':
-
                 vals['reference'] = self.env['ir.sequence'].next_by_code('ord.main.sequence') or '/'
 
         records = super().create(vals_list)
 
-        # Only send notifications if we're not installing/updating modules
+        # ✅ FIXED: Use threading for truly async email sending
         if not self.env.context.get('install_mode') and not self._context.get('module_installation'):
             for record in records:
-                record._send_approval_notification()
+                if record.approver_id and record.approver_id.email:
+                    # Start email sending in background thread - UI responds immediately
+                    thread = threading.Thread(
+                        target=self._send_email_in_thread,
+                        args=(record.id, record.approver_id.email)
+                    )
+                    thread.daemon = True  # Thread dies when main process dies
+                    thread.start()
 
         return records
+
+    def _send_email_in_thread(self, order_id, approver_email):
+        """Send email in background thread"""
+        try:
+            # Small delay to ensure transaction is fully committed
+            time.sleep(0.5)
+
+            # Create new database connection for this thread
+            with self.pool.cursor() as cr:
+                env = self.env(cr=cr)
+                order = env['ord.main'].browse(order_id)
+
+                if order.exists():
+                    order._send_approval_notification()
+                    cr.commit()
+                    _logger.info(f'Email sent in thread for order {order.reference}')
+
+        except Exception as e:
+            _logger.error(f'Thread email sending failed for order ID {order_id}: {e}')
+
+
 
     def _send_approval_notification(self):
         """Send approval notification email"""
