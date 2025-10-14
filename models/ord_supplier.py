@@ -104,17 +104,23 @@ class OrdSupplier(models.Model):
     @api.depends_context('uid')
     def _compute_can_edit_supplier_status(self):
         """Check if current user can edit supplier status"""
+
+        param = self.env['ir.config_parameter'].sudo()
+        direction_dept_name = param.get_param('order.direction_department_name', 'direction')
+        prevention_group_name = param.get_param('order.prevention_group_name', 'odoo_order_prevention')
+
         for record in self:
             user = self.env.user
 
             is_direction = False
+
             if user.department_ids:
-                direction_dept = user.department_ids.filtered(lambda d: d.name == 'direction')
+                direction_dept = user.department_ids.filtered(lambda d: d.name == direction_dept_name.lower())
                 is_direction = bool(direction_dept)
 
             is_prevention = False
             prevention_group = self.env['res.groups'].search([
-                ('name', '=', 'odoo_order_prevention')
+                ('name', '=', prevention_group_name)
             ], limit=1)
             if prevention_group and prevention_group in user.groups_id:
                 is_prevention = True
