@@ -43,11 +43,20 @@ class OrdMain(models.Model):
                                     required=True,
                                     tracking=True,
                                     default=lambda self: self._get_default_department())
+
+    @api.model
+    def _get_approver_group_name(self):
+        """Get approver group name from system parameters"""
+        return self.env['ir.config_parameter'].sudo().get_param(
+            'order.approver_group_name',
+            'odoo_order_approver'  # Default fallback
+        )
+
     approver_id = fields.Many2one(
         'res.users',
         string='Approver',
         required=True,
-        domain="[('groups_id.name', '=', 'odoo_order_approver')]"
+        domain=lambda self: [('groups_id.name', '=', self._get_approver_group_name())]
     )
 
     ticket_subject = fields.Char(
@@ -99,16 +108,21 @@ class OrdMain(models.Model):
             order.new_ticket_subject = order.ticket_id.subject
             order.new_ticket_description = order.ticket_id.description
 
+    @api.model
+    def _get_management_group_names(self):
+        """Get management group names from system parameters"""
+        param = self.env['ir.config_parameter'].sudo()
+        director_group = param.get_param('order.director_group_name', 'Order Director')
+        approver_group = param.get_param('order.approver_group_name', 'Order Approver')
+        return [director_group, approver_group]
+
     @api.depends('department_id', 'owner_id')
     def _compute_viewer_ids(self):
         for record in self:
             viewer_groups = self.env['res.groups']
 
-            # if record.department_id and record.department_id.viewer_group_id:
-            #     viewer_groups += record.department_id
-
             management_groups = self.env['res.groups'].search([
-                ('name', 'in', ['Order Director', 'Order Approver'])
+                ('name', 'in', self._get_management_group_names())
             ])
             viewer_groups += management_groups
             record.viewer_ids = viewer_groups
@@ -121,7 +135,7 @@ class OrdMain(models.Model):
 
         records = super().create(vals_list)
 
-        # ✅ FIXED: Use threading for truly async email sending
+
         if not self.env.context.get('install_mode') and not self._context.get('module_installation'):
             for record in records:
                 if record.approver_id and record.approver_id.email:
@@ -261,7 +275,12 @@ class OrdMain(models.Model):
     def _compute_ui_readonly_state(self):
         """Compute if current user can edit the status field"""
         current_user = self.env.user
-        is_approver_ldap = any(group.name == 'odoo_order_approver' for group in current_user.groups_id)
+        approver_group = self.env['ir.config_parameter'].sudo().get_param(
+            'order.approver_group_name',
+            'odoo_order_approver'
+        )
+
+        is_approver_ldap = any(group.name == approver_group for group in current_user.groups_id)
 
         for record in self:
             has_id = bool(record.id)
