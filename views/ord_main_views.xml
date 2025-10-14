@@ -140,7 +140,7 @@
                                     <group string="File">
                                         <field name="datas"
                                                filename="name"
-                                               invisible="name and name != 'none'"/>
+                                               invisible="name and name not in ['none', False, '']"/>
                                         <field name="full_filename" readonly="1"/>
                                     </group>
                                 </form>
