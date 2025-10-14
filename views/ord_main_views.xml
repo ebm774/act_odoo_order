@@ -122,11 +122,13 @@
                                     <field name="create_date"/>
                                     <button name="action_preview" type="object" string="Preview" icon="fa-eye"/>
                                     <button name="action_download" type="object" string="Download" icon="fa-download"/>
+                                    <button name="action_delete" type="object" string="Delete" icon="fa-trash"/>
                                 </list>
                                 <form>
                                     <header>
                                         <button name="action_preview" type="object" string="Preview" class="btn-info" invisible="not id"/>
                                         <button name="action_download" type="object" string="Download" class="btn-secondary" invisible="not id"/>
+                                        <button name="action_delete" type="object" string="Delete" class="btn-secondary" invisible="not id"/>
                                     </header>
                                     <group>
                                         <group>

@@ -23,13 +23,13 @@ class OrdAttachment(models.Model):
     datas = fields.Binary(string='File', attachment=True)
 
 
-
-
-
     @api.constrains('size_mb')
     def _check_file_size(self):
+        param = self.env['ir.config_parameter'].sudo()
+        max_size = float(param.get_param('order.attachment_max_size', '50'))
+
         for record in self:
-            if record.size_mb > 50:
+            if record.size_mb > max_size:
                 raise UserError(
                     _('File size cannot exceed %d MB. Current size: %.2f MB')
                     % (50, record.size_mb)
@@ -50,6 +50,14 @@ class OrdAttachment(models.Model):
                 raise UserError(
                     _('File type "%s" is not allowed') % record.mimetype
                 )
+    def action_delete(self):
+        self.ensure_one()
+
+        if not self.exists():
+            raise UserError(_("This attachment no longer exists."))
+
+        self.sudo().unlink()
+
 
     def action_download(self):
 
@@ -101,14 +109,16 @@ class OrdAttachment(models.Model):
 
     @api.onchange('datas')
     def _onchange_datas(self):
-        if self.datas:
-            self.full_filename = getattr(self, 'display_name')
-            self.name = getattr(self, 'display_name').rsplit(' ', 1)[0]
+        if not self.datas:
+            return
 
-            decoded_data = base64.b64decode(self.datas)
-            self.size_mb = len(decoded_data) / (1024 * 1024)
-            self.mimetype = self._detect_mimetype_from_content(decoded_data, self.name)
 
+        self.full_filename = getattr(self, 'display_name')
+        self.name = getattr(self, 'display_name').rsplit(' ', 1)[0]
+
+        decoded_data = base64.b64decode(self.datas)
+        self.size_mb = len(decoded_data) / (1024 * 1024)
+        self.mimetype = self._detect_mimetype_from_content(decoded_data, self.name)
 
     def _detect_mimetype_from_content(self, file_data, filename):
         if not file_data:
