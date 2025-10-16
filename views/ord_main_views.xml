@@ -115,24 +115,22 @@
 
                         <page string="Attachments">
                             <field name="attachment_ids" context="{'default_order_id': id}">
-                                <list>
+                                <list create="1" delete="1">
                                     <field name="name"/>
                                     <field name="size_mb" />
                                     <field name="mimetype"/>
                                     <field name="create_date"/>
                                     <button name="action_preview" type="object" string="Preview" icon="fa-eye"/>
                                     <button name="action_download" type="object" string="Download" icon="fa-download"/>
-                                    <button name="action_delete" type="object" string="Delete" icon="fa-trash"/>
                                 </list>
                                 <form>
                                     <header>
                                         <button name="action_preview" type="object" string="Preview" class="btn-info" invisible="not id"/>
                                         <button name="action_download" type="object" string="Download" class="btn-secondary" invisible="not id"/>
-                                        <button name="action_delete" type="object" string="Delete" class="btn-secondary" invisible="not id"/>
                                     </header>
                                     <group>
                                         <group>
-                                            <field name="name" string="Filename"/>
+                                            <field name="name" string="Filename" required="1" placeholder="Upload a file to set filename"/>
                                             <field name="mimetype" readonly="1"/>
                                         </group>
                                         <group>
@@ -140,10 +138,8 @@
                                         </group>
                                     </group>
                                     <group string="File">
-                                        <field name="datas"
-                                               filename="name"
-                                               invisible="name and name not in ['none', False, '']"/>
-                                        <field name="full_filename" readonly="1"/>
+                                        <field name="datas" filename="name" required="1"/>
+                                        <field name="full_filename" readonly="1" invisible="not full_filename"/>
                                     </group>
                                 </form>
                             </field>
