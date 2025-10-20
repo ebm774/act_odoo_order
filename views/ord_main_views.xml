@@ -84,10 +84,20 @@
                     </header>
                     <group>
                         <group string="Detail">
-                            <field name="type"/>
-                            <field name="department_id" options="{'no_create': True, 'no_create_edit': True}"/>
-                            <field name="supplier_id" options="{'no_create': True, 'no_create_edit': True}"/>
-                            <field name="approver_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                            <field name="type"
+                                   class="o_field_highlight_when_empty oe_edit_only"/>
+
+                            <field name="department_id"
+                                   options="{'no_create': True, 'no_create_edit': True}"
+                                   class="o_field_highlight_when_empty oe_edit_only"/>
+
+                            <field name="supplier_id"
+                                   options="{'no_create': True, 'no_create_edit': True}"
+                                   class="o_field_highlight_when_empty oe_edit_only"/>>
+
+                            <field name="approver_id"
+                                   options="{'no_create': True, 'no_create_edit': True}"
+                                   class="o_field_highlight_when_empty oe_edit_only"/>
                         </group>
                         <group string="Order Information">
                             <field name="creation_date" readonly="1"/>
@@ -95,23 +105,22 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="ticket description">
-                            <group>
-                                <field name="ticket_subject" string="Subject"/>
-                                <field name="ticket_description" string="Description"/>
+                    <page string="ticket description">
+                        <group>
+                            <field name="ticket_subject"
+                                   string="Subject"
+                                   placeholder="What do you need?"
+                                   class="o_field_highlight_when_empty oe_edit_only"/>
 
+                            <field name="ticket_description"
+                                   string="Description"
+                                   placeholder="Explain why you need this order and provide relevant details"/>
 
-                                <field name="status" string="Status"
-                                       readonly="ui_readonly_state != 'editable'"
-                                />
-                            </group>
-                        </page>
-                        <page string="Bills" invisible="status != 'accepted'">
-                            <group>
-                                <field name="price" string="Price (€)"/>
-                                <field name="price_comment" string="Comment"/>
-                            </group>
-                        </page>
+                            <field name="status" string="Status"
+                                   readonly="ui_readonly_state != 'editable'"
+                            />
+                        </group>
+                    </page>
 
                         <page string="Attachments">
                             <field name="attachment_ids" context="{'default_order_id': id}">

@@ -14,8 +14,11 @@
 
                 <group string="Change Information">
                     <field name="status_reason"
-                           placeholder="Why are you making this change?"
-                           required="1"/>
+                           required="1"
+                           class="o_field_highlight_when_empty oe_edit_only"/>
+                    <div class="text-info small mb-2" invisible="status_reason">
+                        <i class="fa fa-info-circle"/> Please provide a reason before editing other fields
+                    </div>
                     <field name="status"
                            widget="selection"
                            options="{'no_open': True, 'no_create': True}"

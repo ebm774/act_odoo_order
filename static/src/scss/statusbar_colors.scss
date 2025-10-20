@@ -32,3 +32,37 @@
 .o_form_view .o_form_statusbar .o_statusbar_status .o_arrow_button_current[data-value="accepted"]::after {
     border-left-color: #5cb85c !important;
 }
+
+// Highlight required reason field when empty - disappears when filled
+.o_field_highlight_when_empty {
+    // Only apply styling when field is empty (showing placeholder)
+    .o_input:placeholder-shown {
+        border: 2px solid #17a2b8 !important; // Light blue border
+        background-color: #e7f5f8 !important; // Very light blue background
+
+        &:focus {
+            border-color: #138496 !important; // Darker blue on focus
+            background-color: #d4f1f7 !important; // Slightly darker blue background
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.15);
+        }
+
+        &::placeholder {
+            color: #138496;
+            font-weight: 500;
+            font-style: italic;
+        }
+    }
+
+    // When field has content - return to normal appearance
+    .o_input:not(:placeholder-shown) {
+        border: 1px solid #ced4da !important; // Standard Odoo border
+        background-color: #ffffff !important; // White background
+
+        &:focus {
+            border-color: #80bdff !important; // Standard Odoo focus color
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    }
+
+}
