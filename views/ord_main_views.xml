@@ -161,6 +161,13 @@
                                        invisible="not is_delivered"/>
                             </group>
                         </page>
+                        <page string="Bills" invisible="status != 'accepted'">
+                            <group>
+                                <field name="price" string="Price (€)"/>
+                                <field name="price_comment" string="Comment"/>
+                                 <field name="facturavi" string="Invoiced"/>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
             </form>

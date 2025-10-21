@@ -44,6 +44,12 @@ class OrdMain(models.Model):
                                     tracking=True,
                                     default=lambda self: self._get_default_department())
 
+    facturavi = fields.Boolean(
+        string="Invoiced",
+        default=False,
+        help="Check this box when the order has been invoiced"
+    )
+
     @api.model
     def _get_approver_group_name(self):
         """Get approver group name from system parameters"""
